@@ -9,6 +9,9 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   has_many :semester_assignments, :class_name => "Graphite::ElectiveBlock::SemesterAssignment",
     dependent: :destroy
   has_many :semester_numbers, through: :semester_assignments
+  has_many :elective_block_studies, :class_name => "Graphite::ElectiveBlockStudies",
+    dependent: :destroy
+  has_many :studies, through: :elective_block_studies
 
 
 end
