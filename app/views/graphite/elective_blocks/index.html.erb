@@ -1,0 +1,6 @@
+<% @elective_blocks.each do |elective_block| %>
+  <p>
+    <%= elective_block.name %>
+    <%= link_to t(:label_edit), edit_elective_block_path(elective_block) %>
+  </p>
+<% end %>

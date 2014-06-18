@@ -1,0 +1,102 @@
+<div class="subsection-header">
+  <h6>
+    <%=t :label_elective_block_plural_added %>
+  </h6>
+  <hr>
+</div>
+<table class="table">
+  <tbody>
+    <% if @modules.any? {|mod| !mod.new_record? } %>
+      <% @modules.each do |mod| %>
+        <% next if mod.new_record? %>
+        <tr>
+          <td>
+            <%= mod.name %>
+          </td>
+          <td>
+            <%= mod.employee.try(:full_name) %>
+          </td>
+          <td>
+            <%= "#{mod.semester_number} #{t( :label_semester)}" %>
+          </td>
+          <td>
+            <%= mod.ects_amount %> ECTS
+          </td>
+          <td>
+            <%= mod.student_amount || "-" %>
+          </td>
+          <td>
+            <%= link_to t(:label_edit), edit_elective_block_module_path(@elective_block, mod), :class => "edit-subject" %>
+            <span class="sep">|</span>
+            <%= link_to t(:label_destroy), elective_block_module_path(@elective_block, mod), method: :delete, :class => "destroy-subject" %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td class="text-center">
+          <span>
+            <%=t :label_subject_none_added %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= f.fields_for :modules, subject_stub do |g| %>
+  <%= g.hidden_field :elective_block_id, :value => @elective_block.id %>
+  <div class="subsection-header extra-margin">
+    <h6>
+      <%=t :label_elective_block_new_singular %>
+    </h6>
+    <hr>
+  </div>
+  <div class="form-group extra-margin">
+    <div class="row">
+      <div class="col-md-16">
+        <%= g.label :name, t(:label_elective_block_name) %>
+        <%= g.text_field :name, :class => "form-control lazy-validate", :placeholder => t(:label_elective_block_name), :rows => 3  %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group extra-margin">
+    <div class="row">
+      <div class="col-md-8">
+        <%= g.label :www, t(:label_subject_syllabus_link) %>
+        <%= g.text_field :www, :class => "form-control", :placeholder => t(:label_subject_syllabus_link)  %>
+      </div>
+      <div class="col-md-8">
+        <div class="form-group">
+          <%= g.label :owner_id, t(:label_module_owner_short) %>
+          <%= g.text_field :owner_id, :value => g.object.employee.try(:surname_name), :class => "form-control typeahead-supervisor lazy-validate", :placeholder => t(:label_module_owner_short)  %>
+          <%= g.hidden_field :owner_id %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group extra-margin">
+    <div class="row">
+      <div class="col-md-4">
+        <%= g.label :student_amount, t(:label_elective_block_student_amount) %>
+        <%= g.select :student_amount, options_for_select([["--", ""]] | (5..100).step(5).to_a.collect {|i| [i,i] }, g.object.try(:student_amount)), {}, :class => "form-control" %>
+      </div>
+      <div class="col-md-4">
+        <%= g.label :ects_amount, t(:label_ects_amount) %>
+        <%= g.select :ects_amount, options_for_select((1..30).collect {|i| [i,i] }, g.object.try(:ects_amount)), {}, :class => "form-control" %>
+      </div>
+      <div class="col-md-4">
+        <%= g.label :semester_number, t(:label_semester) %>
+        <%= g.select :semester_number, options_for_select((1..8).collect {|i| [i,i] }, g.object.try(:semester_number)), {}, :class => "form-control" %>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="pull-right">
+    <%= g.button t(:label_cancel), :class => "btn btn-primary cancel-subject" %>
+    <%= g.submit t(:label_save), :class => "btn btn-danger save-subject" %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="section-footer extra-margin">
+    <hr>
+  </div>
+<% end %>

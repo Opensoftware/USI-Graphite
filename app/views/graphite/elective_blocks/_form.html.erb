@@ -1,0 +1,77 @@
+<% content_for :additional_javascripts do %>
+  <%= javascript_include_tag 'supervisor_autocomplete' %>
+<% end %>
+<div class="form-group extra-margin">
+  <%= f.text_field :name, :class => "form-control", :placeholder => t(:label_elective_block_enter_name), :required => true   %>
+</div>
+<hr>
+<div class="form-group extra-margin">
+  <div class="row">
+    <div class="col-md-10">
+      <%= f.label :block_type_id, t(:label_elective_block_type_singular) %>
+      <%= f.select :block_type_id, options_for_select(@block_types.collect {|bt| [bt.name,bt.id] }, @elective_block.block_type_id), {}, :class => "form-control" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :min_modules_amount, t(:label_subject_amount) %>
+      <%= f.select :min_modules_amount, options_for_select([["--", ""]] | (1..10).collect {|i| [i,i] }, @elective_block.min_modules_amount), {}, :class => "form-control" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :min_ects_amount, t(:label_ects_how_many) %>
+      <%= f.select :min_ects_amount, options_for_select([["--", ""]] | (1..30).collect {|i| [i,i] }, @elective_block.min_ects_amount), {}, :class => "form-control" %>
+    </div>
+  </div>
+</div>
+<div class="form-group extra-margin">
+  <%= f.label :study_ids, t(:label_studies) %>
+  <%= f.select :study_ids, options_for_select(@studies.collect {|s| [[s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?), " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "), s.id] }, @elective_block.study_ids), {}, :class => "form-control", :multiple => "multiple", :required => true, :size => 6 %>
+</div>
+<div class="section-header extra-margin">
+  <h5>
+    <%=t :label_elective_block_plural %>
+  </h5>
+  <hr>
+</div>
+
+<div class="elective-subjects">
+  <%= render :partial => "subjects", :locals => { :f => f, :subject_stub => @elective_block.modules.build } %>
+</div>
+
+<%= f.fields_for :elective_blocks, @elective_block.elective_blocks.build do |g| %>
+  <div class="elective-blocks">
+    <div class="section-header extra-margin">
+      <h5>
+        <%=t :label_elective_block_block_plural %>
+      </h5>
+      <hr>
+    </div>
+    <div class="subsection-header extra-margin">
+      <h6>
+        <%=t :label_elective_block_block_added %>
+      </h6>
+      <hr>
+    </div>
+
+    <div class="subsection-header extra-margin">
+      <h6>
+        <%=t :label_elective_block_block_new %>
+      </h6>
+      <hr>
+    </div>
+    <div class="form-group extra-margin">
+      <div class="row">
+        <div class="col-md-16">
+          <%= g.label :name, t(:label_elective_block_name) %>
+          <%= g.text_field :name, :class => "form-control", :placeholder => t(:label_elective_block_enter_name_en_short), :rows => 3  %>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="pull-right">
+      <%= g.submit t(:label_add), :class => "btn btn-danger save-module" %>
+    </div>
+    <div class="clearfix"></div>
+    <div class="section-footer extra-margin">
+      <hr>
+    </div>
+  </div>
+<% end %>

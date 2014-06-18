@@ -1,0 +1,32 @@
+<% content_for :additional_javascript_libraries do %>
+  <%= javascript_include_tag "graphite/elective_block" %>
+  <%= javascript_include_tag "graphite/edit_elective_block" %>
+<% end %>
+<% content_for :content_heading do %>
+  <div class="row">
+    <div class="col-md-9">
+      <h4>
+        <%=t :label_elective_block_add_singular%>
+      </h4>
+    </div>
+    <div class="col-md-7">
+      <%= render :partial => "elective_block_header"  %>
+    </div>
+  </div>
+<% end %>
+<% content_for :content_footnote do %>
+  <div class="row">
+    <div class="col-md-9">
+    </div>
+    <div class="col-md-7">
+      <%= render :partial => "elective_block_header"  %>
+    </div>
+  </div>
+<% end %>
+
+<%= form_for @elective_block, role: "form", :html => {:class => "elective-block"}  do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>
+<div class="subject-form">
+  <%= form_tag elective_block_modules_path(@elective_block), :method => :post, :class => "save-subject-form" %>
+</div>
