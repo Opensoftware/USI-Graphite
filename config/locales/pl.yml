@@ -1,0 +1,18 @@
+pl:
+  label_elective_block_plural: Przedmioty obieralne
+  label_elective_block_plural_added: Dodane przedmioty obieralne
+  label_elective_block_new_singular: Nowy przedmiot obieralny
+  label_elective_block_add_singular: Dodawanie modułu
+  label_elective_block_name: Nazwa przedmiotu obieralnego
+  label_elective_block_enter_name: Podaj nazwę modułu
+  label_elective_block_enter_name_en: Podaj nazwę modułu w języku angielskim
+  label_elective_block_enter_name_en_short: Nazwa modułu w języku angielskim
+  label_elective_block_type_singular: Rodzaj dodawanego modułu
+  label_elective_block_student_amount: Liczba stud. (opcj.)
+  label_elective_block_block_plural: Bloki obieralne
+  label_elective_block_block_new: Nowy blok obieralny
+  label_elective_block_block_added: Dodane bloki obieralne
+  label_subject_amount: Ile przedmiotów
+  label_subject_add_singular: Dodaj przedmiot
+  label_subject_none_added: Nie dodano jeszcze żadnych przedmiotów
+  label_subject_syllabus_link: Link do przedmiotu w Syllabusie
