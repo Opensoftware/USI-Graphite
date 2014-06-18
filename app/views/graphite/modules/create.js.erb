@@ -1,0 +1,6 @@
+<% form = nil %>
+<% form_for( @elective_block) do |f| %>
+  <% form = f %>
+<% end %>
+$("div.elective-subjects").html('<%=raw escape_javascript(render(:partial => "graphite/elective_blocks/subjects", :locals => { :f => form, :subject_stub => @elective_block.modules.build })) %>');
+supervisor_autocomplete();

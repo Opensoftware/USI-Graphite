@@ -1,0 +1,2 @@
+<%= render :partial => "update_subjects" %>
+$("div.subject-form").html('<%= form_tag elective_block_module_path(@elective_block, @module), :method => :patch, :class => "save-subject-form" %>');
