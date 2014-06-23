@@ -16,6 +16,9 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     dependent: :destroy
   has_many :studies, through: :elective_block_studies
   has_many :elective_blocks, foreign_key: :elective_block_id
+  has_many :enrollments, class_name: 'Graphite::ElectiveBlock::Enrollment'
+  belongs_to :annual
+  belongs_to :semester
 
   scope :persisted, -> { where(state: :persisted) }
 

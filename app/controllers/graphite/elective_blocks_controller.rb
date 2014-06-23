@@ -55,7 +55,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   def elective_block_params
     attrs = [:name, :block_type_id, :min_modules_amount, :min_ects_amount,
-      :study_ids => [],
+      :annual_id, :semester_id, :study_ids => [],
       :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
         :ects_amount, :semester_number]
     ]

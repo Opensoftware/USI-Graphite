@@ -18,6 +18,8 @@
     <div class="col-md-3">
       <%= f.label :min_ects_amount, t(:label_ects_how_many) %>
       <%= f.select :min_ects_amount, options_for_select([["--", ""]] | (1..30).collect {|i| [i,i] }, @elective_block.min_ects_amount), {}, :class => "form-control" %>
+      <%= f.hidden_field :annual_id, :value => current_annual.id %>
+      <%= f.hidden_field :semester_id, :value => current_semester.semester.try(:id) %>
     </div>
   </div>
 </div>
