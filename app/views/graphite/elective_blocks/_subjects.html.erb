@@ -23,7 +23,11 @@
             <%= mod.ects_amount %> ECTS
           </td>
           <td>
-            <%= mod.student_amount || "-" %>
+            <% if mod.student_amount %>
+              <%= "#{mod.student_amount} #{t(:label_elective_block_student_amount_short)}" %>
+            <% else %>
+              -
+            <% end %>
           </td>
           <td>
             <%= link_to t(:label_edit), edit_elective_block_module_path(@elective_block, mod), :class => "edit-subject" %>

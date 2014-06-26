@@ -1,0 +1,128 @@
+<% content_for :additional_javascripts do %>
+  <%= javascript_include_tag 'graphite/show_elective_block' %>
+<% end %>
+<div>
+  <div class="row">
+    <div class="col-md-1">
+      <div class="label-wrapper">
+        <span class="label label-danger">
+          <%=t "label_elective_block_type_#{@elective_block.block_type.const_name}_letter" %>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-15">
+      <h4>
+        <%= @elective_block.name %>
+      </h4>
+    </div>
+  </div>
+  <div>
+    <hr class="no-margin">
+  </div>
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-md-2">
+      <h6 class="text-muted">
+        <%=t :label_semester %>
+      </h6>
+    </div>
+    <div class="col-md-6">
+      <h6 class="text-list">
+        <%= @elective_block.semester.try(:name) %>
+      </h6>
+    </div>
+    <div class="col-md-2">
+      <h6 class="text-muted">
+        <%=t :label_annual %>
+      </h6>
+    </div>
+    <div class="col-md-6">
+      <h6 class="text-list">
+        <%= @elective_block.annual.try(:name) %>
+      </h6>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <h6 class="text-muted">
+        <%=t :label_genre%>
+      </h6>
+    </div>
+    <div class="col-md-14">
+      <h6 class="text-list">
+        <%=t "label_elective_block_type_#{@elective_block.block_type.try(:const_name)}", :n => @elective_block.min_modules_amount, :m => @elective_block.modules.count %>
+      </h6>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <h6 class="text-muted">
+        <%=t :label_field_of_study_plural%>
+      </h6>
+    </div>
+    <div class="col-md-14">
+      <h6 class="text-list">
+        <%=raw @studies.collect {|s| "#{s.course.name} - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}" }.join(", <br>") %>
+      </h6>
+    </div>
+  </div>
+  <div class="section-header extra-margin">
+    <h5>
+      <%=t "label_elective_block_student_choose_#{@elective_block.block_type.const_name}" %>
+    </h5>
+    <hr>
+  </div>
+  <%= elective_block_enrollments_info %>
+  <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th colspan="4">
+            <%=t :label_subject_plural %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @enrollments.each do |enrollment| %>
+          <%= f.fields_for :enrollments, enrollment do |g| %>
+            <tr>
+              <td>
+                <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
+                <%= g.hidden_field :_destroy %>
+                <%= g.hidden_field :elective_block_id %>
+                <%= g.hidden_field :student_id %>
+                <%= g.hidden_field :elective_module_id %>
+              </td>
+              <td>
+                <%= g.object.elective_module.name %>
+              </td>
+              <td>
+                <%= g.object.elective_module.employee.full_name %>
+              </td>
+              <% if g.object.elective_module.try(:student_amount).present? %>
+                <td>
+                  <%= "#{g.object.elective_module.enrolled_students}/#{g.object.elective_module.student_amount}" %>
+                </td>
+              <% end %>
+              <td>
+                <%= g.object.elective_module.ects_amount %>
+                ECTS
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="pull-right">
+      <% if @elective_block.enrollments_pending?(current_user.student) %>
+        <span style="padding-right: 1em;">
+          <%=t :label_elective_block_enrollment_pending_desc %>
+        </span>
+      <% end %>
+      <%= f.submit t(:label_save), {:class => "btn btn-danger"}.merge(elective_can_enroll? ? {} : {:disabled => true}) %>
+    </div>
+    <div class="clearfix"></div>
+  <% end %>
+
+</div>
+
+

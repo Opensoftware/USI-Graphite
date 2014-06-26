@@ -1,4 +1,9 @@
 pl:
+  misc:
+    subject_count:
+      zero: 0 przedmiotów
+      one: 1 przedmiot
+      other: "%{count} przedmioty"
   label_elective_block_plural: Przedmioty obieralne
   label_elective_block_plural_added: Dodane przedmioty obieralne
   label_elective_block_new_singular: Nowy przedmiot obieralny
@@ -9,10 +14,25 @@ pl:
   label_elective_block_enter_name_en_short: Nazwa modułu w języku angielskim
   label_elective_block_type_singular: Rodzaj dodawanego modułu
   label_elective_block_student_amount: Liczba stud. (opcj.)
+  label_elective_block_student_amount_short: stud.
+  label_elective_block_chosen_yours: Twoje wybory przedmiotów obieralnych
   label_elective_block_block_plural: Bloki obieralne
   label_elective_block_block_new: Nowy blok obieralny
   label_elective_block_block_added: Dodane bloki obieralne
+  label_elective_block_student_enroll: Zapisz się
+  label_elective_block_student_choose_elective_block_n_from_m_subjects: Wybór przedmiotów
+  label_elective_block_enrollment_pending: Przetwarzane, zaczekaj chwilę
+  label_elective_block_enrollment_accepted: Zaakceptowane
+  label_elective_block_enrollment_pending_desc: Twoje zgłoszenie jest przetwarzane
+  label_elective_block_enrollment_accepted_desc_open: Twoje wybory przedmiotów obieralnych zostały zaakceptowane. Wciąż możesz je zmienić w terminie przeznaczonym na zapisy
+  label_elective_block_enrollment_accepted_desc_close: Twoje wybory przedmiotów obieralnych zostały zaakceptowane.
+  label_elective_block_enrollment_n_from_m_incomplete: Twoje wybory przedmiotów obieralnych są niekompletne. Musisz wybrać dokładnie %{subjects}
+  label_elective_block_enrollment_unavailable: Zapisy na przedmioty obieralne trwają od %{from_day} do %{to_day}
+  label_subject_plural: Przedmioty
   label_subject_amount: Ile przedmiotów
   label_subject_add_singular: Dodaj przedmiot
   label_subject_none_added: Nie dodano jeszcze żadnych przedmiotów
   label_subject_syllabus_link: Link do przedmiotu w Syllabusie
+  label_elective_block_type_elective_block_n_from_m_subjects: Do wyboru %{n} kursy z %{m}
+  label_elective_block_type_elective_block_n_from_m_subjects_letter: K
+  label_field_of_study_plural: Kierunki

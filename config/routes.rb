@@ -4,6 +4,9 @@ Graphite::Engine.routes.draw do
     collection do
       post :create_and_edit
     end
+    member do
+      patch :enroll
+    end
 
     resources :modules
   end

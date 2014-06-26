@@ -17,13 +17,47 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   has_many :studies, through: :elective_block_studies
   has_many :elective_blocks, foreign_key: :elective_block_id
   has_many :enrollments, class_name: 'Graphite::ElectiveBlock::Enrollment'
+  accepts_nested_attributes_for :enrollments, :reject_if => lambda { |enrollment|
+    enrollment[:enroll] == "0"
+  }, allow_destroy: true
   belongs_to :annual
   belongs_to :semester
 
   scope :persisted, -> { where(state: :persisted) }
+  scope :for_semester, ->(semester) do
+    select("DISTINCT #{Graphite::ElectiveBlock.table_name}.*")
+    .joins(:modules)
+    .where("#{Graphite::ElectiveBlock::ElectiveModule.table_name}.semester_number" => semester)
+  end
 
   def <=>(other)
     name <=> other.name
+  end
+
+  def enrollments_pending?(student)
+    @enrollments_pending = {} unless defined?(@enrollments_pending)
+    return @enrollments_pending[student] if @enrollments_pending.has_key?(student)
+    @enrollments_pending[student] = enrollments.select("1 AS ONE").pending
+    .for_student(student)
+    .present?
+  end
+
+  def student_enrolled?(student)
+    @student_enrolled = {} unless defined?(@student_enrolled)
+    return @student_enrolled[student] if @student_enrolled.has_key?(student)
+    @student_enrolled[student] = false
+    if block_type.choose_n_from_m?
+      if min_modules_amount.present?
+        @student_enrolled[student] = !enrollments_pending?(student) &&
+          enrollments.for_student(student).count == min_modules_amount
+      end
+    end
+    @student_enrolled[student]
+  end
+
+  def self.include_peripherals
+    includes(:translations, :block_type => :translations,
+      :modules => [:translations, :employee => :employee_title])
   end
 
 end
