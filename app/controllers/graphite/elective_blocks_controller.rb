@@ -1,6 +1,13 @@
+require 'has_scope'
+
 class Graphite::ElectiveBlocksController < GraphiteController
 
-  authorize_resource except: [:index, :enroll, :check_enrollment]
+  include ActionController::Live
+
+  authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe]
+  skip_authorization_check [:event_pipe]
+
+  helper_method :pipe_name
 
   def index
     authorize! :manage, Graphite::ElectiveBlock
@@ -69,6 +76,38 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   end
 
+  def event_pipe
+    raise CanCan::AccessDenied unless current_user
+    response.headers["Content-Type"] = "text/event-stream"
+    stream_error = false; # used by flusher thread to determine when to stop
+    redis = Redis.new
+
+    # Subscribe to our events
+    redis.subscribe(pipe_name) do |on|
+      on.message do |event, data| # when message is received, write to stream
+        response.stream.write("event: refresh\n")
+        response.stream.write("data: #{data}\n\n")
+      end
+
+      # This is the monitor / connection poker thread
+      # Periodically poke the connection by attempting to write to the stream
+      Thread.new do
+        while !stream_error
+          $redis.publish pipe_name, {}.to_json
+          sleep 2.seconds
+        end
+      end
+    end
+    render nothing: true
+  rescue IOError
+    logger.info "Stream closed"
+    stream_error = true
+  ensure
+    logger.info "Events action is quitting redis and closing stream!"
+    redis.quit if redis
+    response.stream.close  if response
+  end
+
   private
 
   def preload
@@ -90,5 +129,9 @@ class Graphite::ElectiveBlocksController < GraphiteController
           :student_id, :elective_block_id, :enroll, :_destroy]]
     end
     params.require(:elective_block).permit(attrs)
+  end
+
+  def pipe_name
+    "graphite.enrollments.student_id.#{current_user.verifable_id}"
   end
 end

@@ -1,6 +1,10 @@
+require 'graphite/enrollment/status_info'
+
 class Graphite::Enrollment::ElectiveBlockNFromMSubject
 
   attr_reader :elective_block, :student
+
+  include Graphite::Enrollment::StatusInfo
 
   def initialize(elective_block, student)
     @elective_block = elective_block
@@ -15,6 +19,7 @@ class Graphite::Enrollment::ElectiveBlockNFromMSubject
     pending_enrollments = student_enrollments.select do |enrollment|
       enrollment.pending?
     end
+    pending_enrollment_ids = pending_enrollments.collect(&:id)
     accepted_enrollments = student_enrollments.select do |enrollment|
       enrollment.accepted?
     end
@@ -28,6 +33,22 @@ class Graphite::Enrollment::ElectiveBlockNFromMSubject
     elsif elective_block.min_ects_amount.present?
 
     end
-  end
 
+    accepted_enrollments = Graphite::ElectiveBlock::Enrollment
+    .where(:id => pending_enrollment_ids)
+    if accepted_enrollments.any?
+      begin
+        redis = Redis.new
+        accepted_enrollments.collect do |enrollment|
+          if enrollment.accepted?
+            redis.publish("graphite.enrollments.student_id.#{student.id}",
+              {:elective_block_id => elective_block.id,
+                :message => elective_block_enrollment_status(student, elective_block)}.to_json)
+          end
+        end
+      ensure
+        redis.quit
+      end
+    end
+  end
 end
