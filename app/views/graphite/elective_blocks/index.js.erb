@@ -1,0 +1,4 @@
+$("div.pagination-summary > h6").html('<%=t :label_thesis_found, :x => @elective_blocks.total_entries, :current_page => @elective_blocks.current_page, :total_pages => @elective_blocks.total_pages %>');
+$("div.elective-blocks-list").html('<%=escape_javascript(render :partial => "elective_block", :collection => @elective_blocks)  %>');
+$('div.paginator').html('<%= will_paginate @elective_blocks, :renderer => BootstrapPagination::Rails %>');
+$(".has-tooltip").tooltip({delay: {show: 300,hide: 100}});

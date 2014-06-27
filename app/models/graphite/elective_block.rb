@@ -29,6 +29,13 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .joins(:modules)
     .where("#{Graphite::ElectiveBlock::ElectiveModule.table_name}.semester_number" => semester)
   end
+  scope :by_semester, ->(semester) { for_semester(semester) }
+  scope :by_studies, ->(studies) do
+    joins(:studies)
+    .where("#{Studies.table_name}.id" => studies)
+  end
+  scope :by_annual, ->(annual) { where(:annual_id => annual) }
+
 
   def <=>(other)
     name <=> other.name

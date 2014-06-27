@@ -4,14 +4,42 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   include ActionController::Live
 
+  has_scope Graphite::ElectiveBlock, :by_studies, :as => :studies_id
+  has_scope Graphite::ElectiveBlock, :by_semester, :as => :semester_number
+  has_scope Graphite::ElectiveBlock, :by_annual, :as => :annual_id
+
+  DEFAULT_FILTERS = {:studies => :studies_id, :semester => :semester_number, :annual => :annual_id}.freeze
+
   authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe]
   skip_authorization_check [:event_pipe]
 
   helper_method :pipe_name
 
+  respond_to :html, :js, :json
+
   def index
     authorize! :manage, Graphite::ElectiveBlock
-    @elective_blocks = Graphite::ElectiveBlock.all
+    @elective_blocks = apply_scopes(Graphite::ElectiveBlock, params)
+    .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
+    .include_peripherals
+    .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
+    @filters = DEFAULT_FILTERS
+
+    if exportable_format?
+      @cache_key = fragment_cache_key_for(@elective_blocks)
+    else
+      @elective_blocks = @elective_blocks.paginate(:page => params[:page].to_i < 1 ? 1 : params[:page],
+        :per_page => params[:per_page].to_i < 1 ? 10 : params[:per_page])
+    end
+
+    respond_with @elective_blocks do |f|
+      f.js { render :layout => false }
+      [:xlsx, :pdf].each do |format|
+        f.send(format) do
+
+        end
+      end
+    end
   end
 
   def new

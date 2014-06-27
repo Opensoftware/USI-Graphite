@@ -36,3 +36,5 @@ pl:
   label_elective_block_type_elective_block_n_from_m_subjects: Do wyboru %{n} kursy z %{m}
   label_elective_block_type_elective_block_n_from_m_subjects_letter: K
   label_field_of_study_plural: Kierunki
+  label_filter_studies: Studia
+  label_filter_semester: Semestr

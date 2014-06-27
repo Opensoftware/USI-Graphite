@@ -1,5 +1,19 @@
 module Graphite::ElectiveBlocksHelper
 
+  def studies_filter_content
+    return @studies_filter if defined?(@studies_filter)
+    @studies_filter = [[t(:label_all), nil]] | Studies
+    .include_peripherals
+    .load
+    .sort.collect {|s| [[s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?),
+          " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "),
+        s.id]}
+  end
+
+  def semester_filter_content
+    return @semester_filter if defined?(@semester_filter)
+    @semester_filter = [[t(:label_all), nil]] | (1..8).collect {|i| [i, i]}
+  end
 
   def elective_can_enroll?
     return @elective_can_enroll if defined?(@elective_can_enroll)
