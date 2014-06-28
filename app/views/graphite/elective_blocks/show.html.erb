@@ -71,56 +71,58 @@
     </h5>
     <hr>
   </div>
-  <%= elective_block_enrollments_info %>
-  <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th colspan="4">
-            <%=t :label_subject_plural %>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @enrollments.each do |enrollment| %>
-          <%= f.fields_for :enrollments, enrollment do |g| %>
-            <tr style="<%= 'opacity: 0.4;' unless can_enroll_for_subject?(g.object.elective_module) %>">
-              <td>
-                <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
-                <%= g.hidden_field :_destroy %>
-                <%= g.hidden_field :elective_block_id %>
-                <%= g.hidden_field :student_id %>
-                <%= g.hidden_field :elective_module_id %>
-              </td>
-              <td>
-                <%= g.object.elective_module.name %>
-              </td>
-              <td>
-                <%= g.object.elective_module.employee.full_name %>
-              </td>
-              <% if g.object.elective_module.try(:student_amount).present? %>
+  <% if @enrollments.present? %>
+    <%= elective_block_enrollments_info %>
+    <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th colspan="4">
+              <%=t :label_subject_plural %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @enrollments.each do |enrollment| %>
+            <%= f.fields_for :enrollments, enrollment do |g| %>
+              <tr style="<%= 'opacity: 0.4;' unless can_enroll_for_subject?(g.object.elective_module) %>">
                 <td>
-                  <%= "#{g.object.elective_module.enrolled_students}/#{g.object.elective_module.student_amount}" %>
+                  <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
+                  <%= g.hidden_field :_destroy %>
+                  <%= g.hidden_field :elective_block_id %>
+                  <%= g.hidden_field :student_id %>
+                  <%= g.hidden_field :elective_module_id %>
                 </td>
-              <% end %>
-              <td>
-                <%= g.object.elective_module.ects_amount %>
-                ECTS
-              </td>
-            </tr>
+                <td>
+                  <%= g.object.elective_module.name %>
+                </td>
+                <td>
+                  <%= g.object.elective_module.employee.full_name %>
+                </td>
+                <% if g.object.elective_module.try(:student_amount).present? %>
+                  <td>
+                    <%= "#{g.object.elective_module.enrolled_students}/#{g.object.elective_module.student_amount}" %>
+                  </td>
+                <% end %>
+                <td>
+                  <%= g.object.elective_module.ects_amount %>
+                  ECTS
+                </td>
+              </tr>
+            <% end %>
           <% end %>
+        </tbody>
+      </table>
+      <div class="pull-right">
+        <% if @elective_block.enrollments_pending?(current_user.student) %>
+          <span style="padding-right: 1em;">
+            <%=t :label_elective_block_enrollment_pending_desc %>
+          </span>
         <% end %>
-      </tbody>
-    </table>
-    <div class="pull-right">
-      <% if @elective_block.enrollments_pending?(current_user.student) %>
-        <span style="padding-right: 1em;">
-          <%=t :label_elective_block_enrollment_pending_desc %>
-        </span>
-      <% end %>
-      <%= f.submit t(:label_save), {:class => "btn btn-danger"}.merge(elective_can_enroll? ? {} : {:disabled => true}) %>
-    </div>
-    <div class="clearfix"></div>
+        <%= f.submit t(:label_save), {:class => "btn btn-danger"}.merge(elective_can_enroll? ? {} : {:disabled => true}) %>
+      </div>
+      <div class="clearfix"></div>
+    <% end %>
   <% end %>
 
 </div>

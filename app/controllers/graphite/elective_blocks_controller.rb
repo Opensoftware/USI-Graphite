@@ -69,14 +69,16 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .find(params[:id])
     @studies = @elective_block.studies.sort
     @modules = @elective_block.modules.sort
-    @student_enrollments = Graphite::ElectiveBlock::Enrollment.for_student(current_user.student)
-    .for_subject(@modules).include_peripherals
-    @enrollments = @modules.reduce([]) do |sum, mod|
-      sum << (@student_enrollments.detect {|enrollment| enrollment.elective_module == mod } ||
-          mod.enrollments.build(:elective_module => mod,
-          :elective_block => @elective_block,
-          :student => current_user.verifable))
-      sum
+    if current_user.student.present?
+      @student_enrollments = Graphite::ElectiveBlock::Enrollment.for_student(current_user.student)
+      .for_subject(@modules).include_peripherals
+      @enrollments = @modules.reduce([]) do |sum, mod|
+        sum << (@student_enrollments.detect {|enrollment| enrollment.elective_module == mod } ||
+            mod.enrollments.build(:elective_module => mod,
+            :elective_block => @elective_block,
+            :student => current_user.student))
+        sum
+      end
     end
   end
 
