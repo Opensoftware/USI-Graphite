@@ -25,7 +25,10 @@ module Graphite::ElectiveBlocksHelper
     @can_enroll_for_subject = {} unless defined?(@can_enroll_for_subject)
     return @can_enroll_for_subject[subject] if @can_enroll_for_subject.has_key?(subject)
     @can_enroll_for_subject[subject] = elective_can_enroll?
-    @can_enroll_for_subject[subject] &&= subject.open_for_enrollments?
+    unless current_user.student.elective_enrollments.for_subject(subject).any?
+      @can_enroll_for_subject[subject] &&= subject.open_for_enrollments?
+    end
+    @can_enroll_for_subject[subject]
   end
 
   def elective_enrollments_available?
