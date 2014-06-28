@@ -24,7 +24,7 @@
 
 <% if @elective_blocks.present? %>
   <%= form_tag url_for( :action => params[:action], :controller => params[:controller]), :class => 'theses-form' do %>
-    <div class="elective-blocks-list">
+    <div class="elements-list elective-blocks-list">
       <%= render :partial => 'elective_block', :collection => @elective_blocks %>
     </div>
   <% end %>
