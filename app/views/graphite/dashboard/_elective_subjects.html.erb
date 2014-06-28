@@ -1,0 +1,35 @@
+<div class="elective-subjects">
+  <% elective_block.modules.sort.each do |mod| %>
+    <div class="row" style="<%= 'opacity: 0.3;' if elective_block.student_enrolled?(student) && elective_module_enrollments.none? {|enrollment| enrollment.elective_module_id == mod.id } %>">
+      <div class="col-md-4">
+        <p>
+          <%= mod.name %>
+        </p>
+      </div>
+      <div class="col-md-5">
+        <p>
+          <%= mod.employee.full_name %>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p>
+          <%=t :label_semester %>
+          <%= mod.semester_number %>
+        </p>
+      </div>
+      <div class="col-md-1">
+        <% if mod.student_amount %>
+          <p>
+            <%= "#{mod.enrolled_students}/#{mod.student_amount}" %>
+          </p>
+        <% end %>
+      </div>
+      <div class="col-md-3">
+        <p>
+          <%= mod.ects_amount %>
+          ECTS
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>

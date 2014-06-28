@@ -1,0 +1,22 @@
+<div class="row" id="elective-module-<%=elective_block.id%>">
+  <div class="col-md-4">
+    <p>
+      <%=t "label_elective_block_type_#{elective_block.block_type.try(:const_name)}", :n => elective_block.min_modules_amount, :m => elective_block.modules.count %>
+    </p>
+  </div>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-10">
+        <%= link_to elective_block.name, graphite.elective_block_path(elective_block), :class => "navy-link" %>
+      </div>
+      <div class="col-md-6 enrollment-status">
+        <p>
+          <%= elective_block_enrollment_status(current_user.verifable, elective_block) %>
+        </p>
+      </div>
+    </div>
+    <hr class="thin">
+    <%= render :partial => 'graphite/dashboard/elective_subjects', :locals => {:elective_block => elective_block, :student => current_user.student, :elective_module_enrollments => @elective_module_enrollments} %>
+  </div>
+</div>
+<hr>
