@@ -7,7 +7,10 @@ $(document).ready(function() {
       var response = JSON.parse(e.data);
       if("elective_block_id" in response) {
         $("#elective-module-"+response.elective_block_id).find("div.enrollment-status > p").html(response.message);
+        $("#elective-module-"+response.elective_block_id).find("div.elective-subjects").replaceWith(response.subjects);
+        source.close();
       }
+
     });
     return true;
   }, 50);

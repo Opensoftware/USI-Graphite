@@ -8,13 +8,17 @@ module Graphite::Enrollment::StatusInfo
   attr_accessor :output_buffer
 
   def elective_block_enrollment_status(student, elective_mod)
-    if student.has_pending_enrollments_for_module?(elective_mod)
+    if elective_mod.student_enrolled?(student)
+      content_tag :span, :class => "text-success" do
+        I18n.t(:label_elective_block_enrollment_accepted)
+      end
+    elsif student.has_pending_enrollments_for_module?(elective_mod)
       content_tag :span do
         I18n.t(:label_elective_block_enrollment_pending)
       end
-    elsif elective_mod.student_enrolled?(student)
-      content_tag :span, :class => "text-success" do
-        I18n.t(:label_elective_block_enrollment_accepted)
+    elsif elective_mod.student_any_accepted_enrollment?(student)
+      content_tag :span, :class => "text-danger" do
+        I18n.t(:label_elective_block_enrollment_partial_accepted)
       end
     else
       content_tag :span, :class => "text-danger" do

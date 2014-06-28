@@ -26,6 +26,7 @@ pl:
   label_elective_block_student_choose_elective_block_n_from_m_subjects: Wybór przedmiotów
   label_elective_block_enrollment_pending: Przetwarzane, zaczekaj chwilę
   label_elective_block_enrollment_accepted: Zaakceptowane
+  label_elective_block_enrollment_partial_accepted: Dokończ zapisy
   label_elective_block_enrollment_pending_desc: Twoje zgłoszenie jest przetwarzane
   label_elective_block_enrollment_accepted_desc_open: Twoje wybory przedmiotów obieralnych zostały zaakceptowane. Wciąż możesz je zmienić w terminie przeznaczonym na zapisy
   label_elective_block_enrollment_accepted_desc_close: Twoje wybory przedmiotów obieralnych zostały zaakceptowane.

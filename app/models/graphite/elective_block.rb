@@ -49,6 +49,13 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .present?
   end
 
+  def student_any_accepted_enrollment?(student)
+    enrollments.select("1 AS ONE")
+    .for_student(student)
+    .accepted
+    .present?
+  end
+
   def student_enrolled?(student)
     @student_enrolled = {} unless defined?(@student_enrolled)
     return @student_enrolled[student] if @student_enrolled.has_key?(student)

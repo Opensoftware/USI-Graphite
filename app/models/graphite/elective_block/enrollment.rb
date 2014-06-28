@@ -19,6 +19,7 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
   belongs_to :student
 
   scope :pending, -> { where(:state => "pending") }
+  scope :accepted, -> { where(:state => "accepted") }
   scope :for_student, ->(student) { where(:student_id => student) }
   scope :for_elective_block, ->(block) { where(:elective_block_id => block) }
   scope :for_subject, ->(subjects) {

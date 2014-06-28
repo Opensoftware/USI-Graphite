@@ -84,7 +84,7 @@
       <tbody>
         <% @enrollments.each do |enrollment| %>
           <%= f.fields_for :enrollments, enrollment do |g| %>
-            <tr>
+            <tr style="<%= 'opacity: 0.4;' unless can_enroll_for_subject?(g.object.elective_module) %>">
               <td>
                 <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
                 <%= g.hidden_field :_destroy %>

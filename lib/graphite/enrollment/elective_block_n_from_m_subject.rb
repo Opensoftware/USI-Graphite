@@ -19,7 +19,6 @@ class Graphite::Enrollment::ElectiveBlockNFromMSubject
     pending_enrollments = student_enrollments.select do |enrollment|
       enrollment.pending?
     end
-    pending_enrollment_ids = pending_enrollments.collect(&:id)
     accepted_enrollments = student_enrollments.select do |enrollment|
       enrollment.accepted?
     end
@@ -34,18 +33,21 @@ class Graphite::Enrollment::ElectiveBlockNFromMSubject
 
     end
 
-    accepted_enrollments = Graphite::ElectiveBlock::Enrollment
-    .where(:id => pending_enrollment_ids)
-    if accepted_enrollments.any?
+    if student_enrollments.any?
       begin
         redis = Redis.new
-        accepted_enrollments.collect do |enrollment|
-          if enrollment.accepted?
-            redis.publish("graphite.enrollments.student_id.#{student.id}",
-              {:elective_block_id => elective_block.id,
-                :message => elective_block_enrollment_status(student, elective_block)}.to_json)
-          end
-        end
+        elective_module_enrollments = Graphite::ElectiveBlock::Enrollment
+        .for_student(student)
+        .for_elective_block(elective_block)
+        renderer = ActionView::Base.new(Graphite::Engine.paths['app/views'].first)
+
+        redis.publish("graphite.enrollments.student_id.#{student.id}",
+          {:elective_block_id => elective_block.id,
+            :message => elective_block_enrollment_status(student, elective_block),
+            :subjects => renderer.render(:partial => 'graphite/dashboard/elective_subjects',
+              :locals => {:elective_block => elective_block,
+                :student => student,
+                :elective_module_enrollments => elective_module_enrollments})}.to_json)
       ensure
         redis.quit
       end
