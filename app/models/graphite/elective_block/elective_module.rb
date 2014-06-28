@@ -12,6 +12,6 @@ class Graphite::ElectiveBlock::ElectiveModule < ActiveRecord::Base
   end
 
   def open_for_enrollments?
-    student_amount > enrolled_students
+    student_amount.to_i > enrolled_students.to_i
   end
 end
