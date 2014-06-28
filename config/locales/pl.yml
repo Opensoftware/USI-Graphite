@@ -4,6 +4,8 @@ pl:
       zero: 0 przedmiotów
       one: 1 przedmiot
       other: "%{count} przedmioty"
+  label_elective_block_add: Dodaj moduł obieralny
+  label_elective_block_add_plural: Dodaj moduły obieralne
   label_elective_block_plural: Przedmioty obieralne
   label_elective_block_plural_added: Dodane przedmioty obieralne
   label_elective_block_new_singular: Nowy przedmiot obieralny
