@@ -22,9 +22,51 @@
     </div>
   <% end %>
 <% end %>
+<% if can?(:manage, Graphite::ElectiveBlock) %>
+  <% content_for :content_heading do %>
+    <div class="row">
+      <div class="col-md-5"></div>
+      <div class="col-md-11">
+        <div class="pull-right">
+          <%= button_tag :class => 'inline-btn select-all', :type => :button do %>
+            <%= content_tag :i, nil, :class => 'icon icon-navy icon-checkbox-accept' %>
+            <%=t :label_select_all%>
+          <% end %>
+          <%= form_tag collection_destroy_elective_blocks_path, :method => :delete do %>
+            <%= button_tag :class => 'inline-btn destroy-all', :type => :button do %>
+              <%= content_tag :i, nil, :class => 'icon icon-red icon-delete' %>
+              <%=t :label_destroy_selected%>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+<% content_for :content_footnote do %>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8 paginator">
+      <%= will_paginate @elective_blocks, :renderer => BootstrapPagination::Rails %>
+    </div>
+    <div class="col-md-4">
+      <div class="pull-right per-page">
+        <h6 class="text-list">
+          <%=t :label_search_elements_amount%>:
+          <%= raw [10,20,40,80].collect {|i| link_to(i, diamond.theses_path(:per_page => i)) }.join(" ") %>
+        </h6>
+      </div>
+    </div>
+  </div>
+<% end %>
 
+<div class="pagination-summary">
+  <h6 class="text-list no-margin">
+    <%=t :label_elective_block_found, :x => @elective_blocks.total_entries, :current_page => @elective_blocks.current_page, :total_pages => @elective_blocks.total_pages %>
+  </h6>
+</div>
 <% if @elective_blocks.present? %>
-  <%= form_tag url_for( :action => params[:action], :controller => params[:controller]), :class => 'theses-form' do %>
+  <%= form_tag url_for( :action => params[:action], :controller => params[:controller]), :class => 'elements-form elective-blocks-form' do %>
     <div class="elements-list elective-blocks-list">
       <%= render :partial => 'elective_block', :collection => @elective_blocks %>
     </div>

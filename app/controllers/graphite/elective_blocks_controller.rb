@@ -108,6 +108,26 @@ class Graphite::ElectiveBlocksController < GraphiteController
     end
   end
 
+  def collection_destroy
+    @elective_blocks = Graphite::ElectiveBlock.where(:id => params[:elective_block_ids])
+    authorize! :destroy, Graphite::ElectiveBlock
+    @action_performed = true
+
+    Graphite::ElectiveBlock.transaction do
+      begin
+        @elective_blocks.destroy_all
+      rescue
+        @action_performed = false
+        raise ActiveRecord::Rollback
+      end
+    end
+    respond_with @elective_blocks do |f|
+      f.json do
+        render :layout => false
+      end
+    end
+  end
+
   def enroll
     @elective_block = Graphite::ElectiveBlock.find(params[:id])
     authorize! :update, @elective_block
