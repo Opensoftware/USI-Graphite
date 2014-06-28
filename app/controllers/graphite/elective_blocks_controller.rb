@@ -93,6 +93,21 @@ class Graphite::ElectiveBlocksController < GraphiteController
     end
   end
 
+  def destroy
+    @elective_block = Graphite::ElectiveBlock.find(params[:id])
+    authorize! :destroy, @elective_block
+
+    @elective_block.destroy
+    respond_with @elective_block do |f|
+      f.html do
+        redirect_to elective_blocks_path
+      end
+      f.js do
+        render :layout => false
+      end
+    end
+  end
+
   def enroll
     @elective_block = Graphite::ElectiveBlock.find(params[:id])
     authorize! :update, @elective_block

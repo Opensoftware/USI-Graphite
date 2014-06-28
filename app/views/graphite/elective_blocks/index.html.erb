@@ -1,5 +1,6 @@
 <% content_for :additional_javascripts do %>
   <%= javascript_include_tag 'filter_form' %>
+  <%= javascript_include_tag 'graphite/elective_block_list' %>
 <% end %>
 <%= content_for :filter_menu do %>
   <%= form_tag url_for( :action => params[:action], :controller => params[:controller]), :class => 'filter-form' do %>
