@@ -18,11 +18,13 @@
         </p>
       </div>
       <div class="col-md-1">
-        <% if mod.student_amount %>
-          <p>
+        <p>
+          <% if mod.student_amount %>
             <%= "#{mod.enrolled_students}/#{mod.student_amount}" %>
-          </p>
-        <% end %>
+          <% else %>
+            -
+          <% end %>
+        </p>
       </div>
       <div class="col-md-3">
         <p>

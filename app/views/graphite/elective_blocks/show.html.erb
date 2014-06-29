@@ -77,7 +77,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th colspan="4">
+            <th colspan="5">
               <%=t :label_subject_plural %>
             </th>
           </tr>
@@ -99,11 +99,13 @@
                 <td>
                   <%= g.object.elective_module.employee.full_name %>
                 </td>
-                <% if g.object.elective_module.try(:student_amount).present? %>
-                  <td>
+                <td>
+                  <% if g.object.elective_module.try(:student_amount).present? %>
                     <%= "#{g.object.elective_module.enrolled_students}/#{g.object.elective_module.student_amount}" %>
-                  </td>
-                <% end %>
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
                 <td>
                   <%= g.object.elective_module.ects_amount %>
                   ECTS
