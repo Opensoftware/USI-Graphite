@@ -7,17 +7,13 @@
 <hr>
 <div class="form-group extra-margin">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
       <%= f.label :block_type_id, t(:label_elective_block_type_singular) %>
       <%= f.select :block_type_id, options_for_select(@block_types.collect {|bt| [bt.name,bt.id] }, @elective_block.block_type_id), {}, :class => "form-control block-type" %>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
       <%= f.label :min_modules_amount, t(:label_subject_amount) %>
       <%= f.select :min_modules_amount, options_for_select([["--", ""]] | (1..10).collect {|i| [i,i] }, @elective_block.min_modules_amount), {}, :class => "form-control" %>
-    </div>
-    <div class="col-md-3">
-      <%= f.label :min_ects_amount, t(:label_ects_how_many) %>
-      <%= f.select :min_ects_amount, options_for_select([["--", ""]] | (1..30).collect {|i| [i,i] }, @elective_block.min_ects_amount), {}, :class => "form-control" %>
       <%= f.hidden_field :annual_id, :value => current_annual.id %>
       <%= f.hidden_field :semester_id, :value => current_semester.semester.try(:id) %>
     </div>
