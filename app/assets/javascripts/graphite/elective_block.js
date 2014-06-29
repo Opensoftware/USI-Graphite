@@ -2,6 +2,13 @@ $(document).ready(function() {
   var base_validation_form = $( "form.elective-block" );
   var base_validation_handler = base_validation_form.validate();
 
+  $("select.block-type").change(function() {
+    var ctxt = $("div.elective-blocks");
+    ctxt.toggle(function() {
+      return $(this).find("option:eq("+$(this).prop("selectedIndex")+")").val() ==
+      ctxt.data("block_type_id");
+    });
+  });
 
   $("div.content")
   .on("click", "a.edit-subject, a.destroy-subject", function() {

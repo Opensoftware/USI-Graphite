@@ -9,7 +9,7 @@
   <div class="row">
     <div class="col-md-10">
       <%= f.label :block_type_id, t(:label_elective_block_type_singular) %>
-      <%= f.select :block_type_id, options_for_select(@block_types.collect {|bt| [bt.name,bt.id] }, @elective_block.block_type_id), {}, :class => "form-control" %>
+      <%= f.select :block_type_id, options_for_select(@block_types.collect {|bt| [bt.name,bt.id] }, @elective_block.block_type_id), {}, :class => "form-control block-type" %>
     </div>
     <div class="col-md-3">
       <%= f.label :min_modules_amount, t(:label_subject_amount) %>
@@ -39,7 +39,7 @@
 </div>
 
 <%= f.fields_for :elective_blocks, @elective_block.elective_blocks.build do |g| %>
-  <div class="elective-blocks">
+  <div class="elective-blocks" style="<%= 'display: none;' if @elective_block.block_type.try(:choose_n_from_m?) %>" data-block_type_id="<%=Graphite::ElectiveBlock::BlockType.block_of_subjects.id%>">
     <div class="section-header extra-margin">
       <h5>
         <%=t :label_elective_block_block_plural %>

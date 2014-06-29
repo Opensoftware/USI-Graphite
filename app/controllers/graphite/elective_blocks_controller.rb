@@ -45,6 +45,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
   def new
     @elective_block = Graphite::ElectiveBlock.new
     preload
+    @elective_block.block_type = @block_types.first
   end
 
   def create
@@ -181,7 +182,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @studies = Studies.for_annual(current_annual).includes(course: :translations,
       study_type: :translations, study_degree: :translations)
     .load.sort {|s1, s2| s1.course.name <=> s2.course.name}
-    @block_types = Graphite::ElectiveBlock::BlockType.all
+    @block_types = Graphite::ElectiveBlock::BlockType.all.sort
     @modules = @elective_block.modules.sort
   end
 

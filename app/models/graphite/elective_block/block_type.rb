@@ -7,6 +7,9 @@ class Graphite::ElectiveBlock::BlockType < ActiveRecord::Base
 
   validates :name, :const_name, presence: true
 
+  def self.block_of_subjects
+    where(const_name: 'elective_block_block_of_subjects').first
+  end
 
   def choose_n_from_m?
     const_name == 'elective_block_n_from_m_subjects'
