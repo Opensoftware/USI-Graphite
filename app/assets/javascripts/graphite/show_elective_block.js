@@ -1,8 +1,9 @@
 $(document).ready(function() {
-  $.validator.addMethod('require-one', function (value) {
-    return $('.require-one:checked').size() > 0;
-  }, $.validator.messages['required']);
-  var checkboxes = $('.require-one');
+  $.validator.addMethod('require-amount', function (value) {
+    var size = $('.require-amount:checked').size();
+    return size == $("h6.block-type").data("elective-block-subjects-amount");
+  }, $.validator.format(pl_translations['validator_match_subject_amount'], $("h6.block-type").data("elective-block-subjects-amount")));
+  var checkboxes = $('.require-amount');
   var checkbox_names = $.map(checkboxes, function(e,i) {
     return $(e).attr("name")
   }).join(" ");

@@ -48,7 +48,7 @@
       </h6>
     </div>
     <div class="col-md-14">
-      <h6 class="text-list">
+      <h6 class="text-list block-type" data-elective-block-subjects-amount="<%=@elective_block.min_modules_amount%>">
         <%=t "label_elective_block_type_#{@elective_block.block_type.try(:const_name)}", :n => @elective_block.min_modules_amount, :m => @elective_block.modules.count %>
       </h6>
     </div>
@@ -87,7 +87,7 @@
             <%= f.fields_for :enrollments, enrollment do |g| %>
               <tr style="<%= 'opacity: 0.4;' unless can_enroll_for_subject?(g.object.elective_module) %>">
                 <td>
-                  <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
+                  <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-amount'} %>
                   <%= g.hidden_field :_destroy %>
                   <% if can_enroll_for_subject?(g.object.elective_module) %>
                     <%= g.hidden_field :elective_block_id %>
