@@ -69,7 +69,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .find(params[:id])
     @studies = @elective_block.studies.sort
     @modules = @elective_block.modules.sort
-    if current_user.student.present?
+    if current_user.student?
       @student_enrollments = Graphite::ElectiveBlock::Enrollment.for_student(current_user.student)
       .for_subject(@modules).include_peripherals
       @enrollments = @modules.reduce([]) do |sum, mod|

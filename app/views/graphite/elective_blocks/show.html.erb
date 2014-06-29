@@ -65,13 +65,13 @@
       </h6>
     </div>
   </div>
-  <div class="section-header extra-margin">
-    <h5>
-      <%=t "label_elective_block_student_choose_#{@elective_block.block_type.const_name}" %>
-    </h5>
-    <hr>
-  </div>
   <% if @enrollments.present? %>
+    <div class="section-header extra-margin">
+      <h5>
+        <%=t "label_elective_block_student_choose_#{@elective_block.block_type.const_name}" %>
+      </h5>
+      <hr>
+    </div>
     <%= elective_block_enrollments_info %>
     <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
       <table class="table">
