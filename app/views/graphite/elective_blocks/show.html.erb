@@ -89,9 +89,11 @@
                 <td>
                   <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-one'} %>
                   <%= g.hidden_field :_destroy %>
-                  <%= g.hidden_field :elective_block_id %>
-                  <%= g.hidden_field :student_id %>
-                  <%= g.hidden_field :elective_module_id %>
+                  <% if can_enroll_for_subject?(g.object.elective_module) %>
+                    <%= g.hidden_field :elective_block_id %>
+                    <%= g.hidden_field :student_id %>
+                    <%= g.hidden_field :elective_module_id %>
+                  <% end %>
                 </td>
                 <td>
                   <%= g.object.elective_module.name %>
