@@ -8,5 +8,7 @@ class Graphite::ElectiveBlock::Block < ActiveRecord::Base
     dependent: :destroy, foreign_key: :elective_block_id
   has_many :modules, through: :block_modules,
     class_name: "Graphite::ElectiveBlock::ElectiveModule", source: :elective_module
+  has_many :enrollments, class_name: "Graphite::ElectiveBlock::Enrollment",
+    dependent: :destroy
 
 end
