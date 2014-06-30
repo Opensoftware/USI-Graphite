@@ -15,4 +15,8 @@ class Graphite::ElectiveBlock::BlockType < ActiveRecord::Base
     const_name == 'elective_block_n_from_m_subjects'
   end
 
+  def block_of_subjects?
+    const_name == 'elective_block_block_of_subjects'
+  end
+
 end

@@ -11,12 +11,6 @@
           <%= mod.employee.full_name %>
         </p>
       </div>
-      <div class="col-md-3">
-        <p>
-          <%=t :label_semester %>
-          <%= mod.semester_number %>
-        </p>
-      </div>
       <div class="col-md-1">
         <p>
           <% if mod.student_amount %>
@@ -30,6 +24,12 @@
         <p>
           <%= mod.ects_amount %>
           ECTS
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p>
+          <%=t :label_semester %>
+          <%= mod.semester_number %>
         </p>
       </div>
     </div>

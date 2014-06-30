@@ -1,29 +1,16 @@
 <div class="elective-subjects">
   <% elective_block.elective_blocks.sort.each do |block| %>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-13">
         <p>
-          <%= block.name %>
-        </p>
-      </div>
-      <div class="col-md-5">
-        <p>
-
+          <%= [block.name, *("(#{block.modules.collect(&:name).sort.join(", ")})" if block.modules.present? )].join(" ") %>
         </p>
       </div>
       <div class="col-md-3">
         <p>
           <%=t :label_semester %>
-
+          <%= block.modules.collect(&:semester_number).uniq.sort.join(", ") %>
         </p>
-      </div>
-      <div class="col-md-1">
-        <p>
-
-        </p>
-      </div>
-      <div class="col-md-3">
-        
       </div>
     </div>
   <% end %>

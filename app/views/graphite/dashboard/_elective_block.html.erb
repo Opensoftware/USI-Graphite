@@ -16,7 +16,11 @@
       </div>
     </div>
     <hr class="thin">
-    <%= render :partial => 'graphite/dashboard/elective_subjects', :locals => {:elective_block => elective_block, :student => current_user.student, :elective_module_enrollments => @elective_module_enrollments} %>
+    <% if elective_block.block_type.try(:choose_n_from_m?) %>
+      <%= render :partial => 'graphite/dashboard/elective_subjects', :locals => {:elective_block => elective_block, :student => current_user.student, :elective_module_enrollments => @elective_module_enrollments} %>
+    <% elsif elective_block.block_type.try(:block_of_subjects?) %>
+      <%= render :partial => 'graphite/dashboard/elective_blocks', :locals => {:elective_block => elective_block, :student => current_user.student, :elective_module_enrollments => @elective_module_enrollments} %>
+    <% end %>
   </div>
 </div>
 <hr>
