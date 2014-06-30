@@ -6,7 +6,7 @@
   <%= form_tag url_for( :action => params[:action], :controller => params[:controller]), :class => 'filter-form' do %>
     <div class="row">
       <% @filters.each do |filter, field| %>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="form-group">
             <%= label_tag "#{field}", t("label_filter_#{filter}") %>
             <%= select_tag "#{field}", options_for_select(send("#{filter}_filter_content"), params[field]) {}, :class => "form-control"  %>

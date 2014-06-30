@@ -2,6 +2,12 @@ module Graphite::ElectiveBlocksHelper
 
   include Graphite::ElectiveBlocksCommonHelper
 
+  def block_type_filter_content
+    return @block_type_filter if defined?(@block_type_filter)
+    @block_type_filter = [[t(:label_all), nil]] | Graphite::ElectiveBlock::BlockType.all
+    .collect {|bt| ["#{bt.name} (#{t("label_elective_block_type_#{bt.const_name}_letter")})", bt.id]}
+  end
+
   def studies_filter_content
     return @studies_filter if defined?(@studies_filter)
     @studies_filter = [[t(:label_all), nil]] | Studies

@@ -39,6 +39,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .where("#{Studies.table_name}.id" => studies)
   end
   scope :by_annual, ->(annual) { where(:annual_id => annual) }
+  scope :by_block_type, ->(block_type) { where(:block_type_id => block_type) }
   scope :parents_only, -> { where("elective_block_id IS NULL") }
 
 
@@ -75,7 +76,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   end
 
   def self.include_peripherals
-    includes(:translations, :block_type => :translations,
+    includes(:annual, :translations, :block_type => :translations,
       :modules => [:translations, :employee => :employee_title])
   end
 

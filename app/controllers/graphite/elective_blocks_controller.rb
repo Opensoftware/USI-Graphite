@@ -7,8 +7,9 @@ class Graphite::ElectiveBlocksController < GraphiteController
   has_scope Graphite::ElectiveBlock, :by_studies, :as => :studies_id
   has_scope Graphite::ElectiveBlock, :by_semester, :as => :semester_number
   has_scope Graphite::ElectiveBlock, :by_annual, :as => :annual_id
+  has_scope Graphite::ElectiveBlock, :by_block_type, :as => :block_type_id
 
-  DEFAULT_FILTERS = {:studies => :studies_id, :semester => :semester_number, :annual => :annual_id}.freeze
+  DEFAULT_FILTERS = {:block_type => :block_type_id, :studies => :studies_id, :semester => :semester_number, :annual => :annual_id}.freeze
 
   authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe]
   skip_authorization_check [:event_pipe]
@@ -22,6 +23,8 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @elective_blocks = apply_scopes(Graphite::ElectiveBlock, params)
     .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
     .include_peripherals
+    .includes(:studies => [:course => :translations, :study_type => :translations,
+        :study_degree => :translations])
     .parents_only
     .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
     @filters = DEFAULT_FILTERS
