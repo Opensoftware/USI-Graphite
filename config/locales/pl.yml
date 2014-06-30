@@ -4,6 +4,10 @@ pl:
       zero: 0 przedmiotów
       one: 1 przedmiot
       other: "%{count} przedmioty"
+    block_count:
+      zero: 0 bloków
+      one: 1 blok przedmiotów
+      other: "%{count} bloki przedmiotów"
   label_elective_block_add: Dodaj moduł obieralny
   label_elective_block_add_plural: Dodaj moduły obieralne
   label_elective_block_found: Znaleziono %{x} wyników dla zadanych kryteriów. Strona %{current_page} z %{total_pages}
@@ -40,8 +44,8 @@ pl:
   label_subject_add_singular: Dodaj przedmiot
   label_subject_none_added: Nie dodano jeszcze żadnych przedmiotów
   label_subject_syllabus_link: Link do przedmiotu w Syllabusie
-  label_elective_block_type_elective_block_n_from_m_subjects: Do wyboru %{n} kursy z %{m}
-  label_elective_block_type_elective_block_block_of_subjects: Do wyboru %{n} bloki przedmiotów z %{m}
+  label_elective_block_type_elective_block_n_from_m_subjects: Do wyboru %{counted_subjects} z %{m}
+  label_elective_block_type_elective_block_block_of_subjects: Do wyboru %{counted_blocks} z %{m}
   label_elective_block_type_elective_block_n_from_m_subjects_letter: P
   label_elective_block_type_elective_block_block_of_subjects_letter: B
   label_field_of_study_plural: Kierunki

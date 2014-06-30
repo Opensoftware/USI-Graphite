@@ -1,5 +1,7 @@
 module Graphite::ElectiveBlocksHelper
 
+  include Graphite::ElectiveBlocksCommonHelper
+
   def studies_filter_content
     return @studies_filter if defined?(@studies_filter)
     @studies_filter = [[t(:label_all), nil]] | Studies

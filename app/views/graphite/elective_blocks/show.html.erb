@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-14">
       <h6 class="text-list block-type" data-elective-block-subjects-amount="<%=@elective_block.min_modules_amount%>">
-        <%=t "label_elective_block_type_#{@elective_block.block_type.try(:const_name)}", :n => @elective_block.min_modules_amount, :m => @elective_block.modules.count %>
+        <%= send("#{@elective_block.block_type.try(:const_name)}_selection", @elective_block) %>
       </h6>
     </div>
   </div>
