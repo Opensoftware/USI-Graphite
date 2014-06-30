@@ -4,7 +4,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   globalize_accessors :locales => I18n.available_locales
 
   belongs_to :block_type
-  has_many :modules, :class_name => "Graphite::ElectiveBlock::ElectiveModule",
+  has_many :modules, class_name: "Graphite::ElectiveBlock::ElectiveModule",
     dependent: :destroy
   accepts_nested_attributes_for :modules, :reject_if => lambda { |mod|
     mod[:name].blank? || mod[:owner_id].blank?
@@ -15,7 +15,11 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   has_many :elective_block_studies, :class_name => "Graphite::ElectiveBlockStudies",
     dependent: :destroy
   has_many :studies, through: :elective_block_studies
-  has_many :elective_blocks, foreign_key: :elective_block_id
+  has_many :elective_blocks, class_name: 'Graphite::ElectiveBlock::Block',
+    dependent: :destroy
+  accepts_nested_attributes_for :elective_blocks, :reject_if => lambda { |elective_block|
+    elective_block[:module_ids].blank?
+  }, allow_destroy: true
   has_many :enrollments, class_name: 'Graphite::ElectiveBlock::Enrollment'
   accepts_nested_attributes_for :enrollments, :reject_if => lambda { |enrollment|
     enrollment[:enroll] == "0"

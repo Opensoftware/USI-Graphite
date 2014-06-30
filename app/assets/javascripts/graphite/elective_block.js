@@ -26,6 +26,19 @@ $(document).ready(function() {
       serialized_data: "&"
     });
     req.bindReq("perform");
+  .on("click", "button.cancel-form", function() {
+    var context = $("form.new-"+$(this).data("type")+"-form");
+    var req = $(this).bindReq({
+      context: context,
+      dataType: "script",
+      request: {
+        type: "GET"
+      },
+      serialized_data: [context.serialize(), base_validation_form.find("input:not([name='_method']), select").serialize()].join("&")
+    });
+    req.bindReq("perform");
+    return false;
+  })
     return false;
   });
 

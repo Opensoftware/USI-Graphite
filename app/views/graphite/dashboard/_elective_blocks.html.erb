@@ -1,0 +1,30 @@
+<div class="elective-subjects">
+  <% elective_block.elective_blocks.sort.each do |block| %>
+    <div class="row">
+      <div class="col-md-4">
+        <p>
+          <%= block.name %>
+        </p>
+      </div>
+      <div class="col-md-5">
+        <p>
+
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p>
+          <%=t :label_semester %>
+
+        </p>
+      </div>
+      <div class="col-md-1">
+        <p>
+
+        </p>
+      </div>
+      <div class="col-md-3">
+        
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -2,6 +2,16 @@ class Graphite::ModulesController < GraphiteController
 
   authorize_resource :class => "Graphite::ElectiveBlock::ElectiveModule"
 
+  def new
+    preload
+    @module = Graphite::ElectiveBlock::ElectiveModule.new(elective_block: @elective_block)
+    respond_to do |f|
+      f.js do
+        render layout: false
+      end
+    end
+  end
+
   def create
     @module = Graphite::ElectiveBlock::ElectiveModule.create(module_params)
     preload
@@ -58,5 +68,8 @@ class Graphite::ModulesController < GraphiteController
     .includes(:modules => [:translations, :employee => :employee_title])
     .find(params[:elective_block_id])
     @modules = @elective_block.modules.sort
+    if (block_id = params[:elective_block][:elective_blocks_attributes].values.first['id']).present?
+      @block = Graphite::ElectiveBlock::Block.find(block_id)
+    end
   end
 end
