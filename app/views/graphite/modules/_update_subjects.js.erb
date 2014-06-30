@@ -3,4 +3,5 @@
   <% form = f %>
 <% end %>
 $("div.elective-subjects").html('<%=raw escape_javascript(render(:partial => "graphite/elective_blocks/subjects", :locals => { :f => form, :subject_stub => @module })) %>');
+$('select.module-ids').html('<%=raw escape_javascript(options_for_select(@elective_block.modules.collect {|mod| [mod.name, mod.id] }, @block.try(:module_ids)))%>');
 supervisor_autocomplete();

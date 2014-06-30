@@ -58,9 +58,9 @@ class Graphite::ModulesController < GraphiteController
   private
 
   def module_params
-    params.require(:elective_block).permit(:modules_attributes => [:id, :name,
+    attrs = params.require(:elective_block).permit(:modules_attributes => [:id, :name,
         :www, :owner_id, :student_amount, :ects_amount, :semester_number, :elective_block_id])
-    .values.first.values.first
+    attrs.values.first.values.first
   end
 
   def preload

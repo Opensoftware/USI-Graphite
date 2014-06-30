@@ -10,9 +10,7 @@ $(document).ready(function() {
     });
   });
 
-  $("div.content")
-  .on("click", "a.edit-subject, a.destroy-subject", function() {
-
+  var send_req = function() {
     var that = $(this);
     var req = $(this).bindReq({
       context: base_validation_form,
@@ -23,9 +21,11 @@ $(document).ready(function() {
       request: {
         type: that.data("method") || "GET"
       },
-      serialized_data: "&"
+      serialized_data: base_validation_form.serialize()
     });
     req.bindReq("perform");
+  };
+  $("div.content")
   .on("click", "button.cancel-form", function() {
     var context = $("form.new-"+$(this).data("type")+"-form");
     var req = $(this).bindReq({
@@ -39,12 +39,28 @@ $(document).ready(function() {
     req.bindReq("perform");
     return false;
   })
+  .on("click", "a.edit-element", function() {
+    send_req.call(this);
+    return false;
+  })
+  .on("click", "a.destroy-element", function() {
+    $(this).yesnoDialog({
+      topic: $.i18n._('confirmation_action_delete_element'),
+      confirmation_action: function() {
+        var that = this;
+        this.footer.find("button.btn-confirmation").click(function() {
+          send_req.call(that.element);
+          $("div.modal").modal("hide");
+        });
+      }
+    });
+    $(this).yesnoDialog("show");
     return false;
   });
 
   $("input.save-and-close").click(function() {
     var context = $(this).closest("form");
-    $("input.lazy-validate").each(function() {
+    $("input.lazy-validate, select.lazy-validate").each(function() {
       $(this).rules("remove");
     });
 

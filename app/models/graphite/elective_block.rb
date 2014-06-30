@@ -39,6 +39,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .where("#{Studies.table_name}.id" => studies)
   end
   scope :by_annual, ->(annual) { where(:annual_id => annual) }
+  scope :parents_only, -> { where("elective_block_id IS NULL") }
 
 
   def <=>(other)

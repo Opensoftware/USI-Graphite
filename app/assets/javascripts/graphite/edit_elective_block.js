@@ -4,10 +4,13 @@ $(document).ready(function() {
 
   $("div.content")
   .on("click", "input.save-subject", function() {
-    $("input.lazy-validate").each(function() {
+    $("input.lazy-validate", "div.elective-subjects").each(function() {
       $(this).rules("add", {
         required:true
       });
+    });
+    $("input.lazy-validate, select.lazy-validate", "div.elective-blocks").each(function() {
+      $(this).rules("remove");
     });
     var context = $("form.save-subject-form");
 
@@ -20,5 +23,28 @@ $(document).ready(function() {
       req.bindReq("perform");
     }
     return false;
+  })
+  .on("click", "input.save-block", function() {
+    $("select.lazy-validate, input.lazy-validate", "div.elective-blocks").each(function() {
+      $(this).rules("add", {
+        required:true
+      });
+    });
+    $("input.lazy-validate, select.lazy-validate", "div.elective-subjects").each(function() {
+      $(this).rules("remove");
+    });
+    var context = $("form.save-block-form");
+
+    if(base_validation_handler.form()) {
+      var req = $(this).bindReq({
+        context: context,
+        dataType: "script",
+        serialized_data: [context.serialize(), base_validation_form.find("input:not([name='_method']), select").serialize()].join("&")
+      });
+      req.bindReq("perform");
+    }
+    return false;
   });
+
+//  elective-block
 });

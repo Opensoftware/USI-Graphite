@@ -30,9 +30,9 @@
             <% end %>
           </td>
           <td>
-            <%= link_to t(:label_edit), edit_elective_block_module_path(@elective_block, mod), :class => "edit-subject" %>
+            <%= link_to t(:label_edit), edit_elective_block_module_path(@elective_block, mod), :class => "edit-element" %>
             <span class="sep">|</span>
-            <%= link_to t(:label_destroy), elective_block_module_path(@elective_block, mod), method: :delete, :class => "destroy-subject" %>
+            <%= link_to t(:label_destroy), elective_block_module_path(@elective_block, mod), method: :delete, :class => "destroy-element" %>
           </td>
         </tr>
       <% end %>

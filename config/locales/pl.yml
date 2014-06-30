@@ -22,6 +22,7 @@ pl:
   label_elective_block_chosen_yours: Twoje wybory przedmiotów obieralnych
   label_elective_block_block_plural: Bloki obieralne
   label_elective_block_block_new: Nowy blok obieralny
+  label_elective_block_block_name: Nazwa bloku obieralnego
   label_elective_block_block_added: Dodane bloki obieralne
   label_elective_block_block_none_added: Nie dodano jeszcze żadnych bloków
   label_elective_block_student_enroll: Zapisz się
@@ -35,12 +36,14 @@ pl:
   label_elective_block_enrollment_n_from_m_incomplete: Twoje wybory przedmiotów obieralnych są niekompletne. Musisz wybrać dokładnie %{subjects}
   label_elective_block_enrollment_unavailable: Zapisy na przedmioty obieralne trwają od %{from_day} do %{to_day}
   label_subject_plural: Przedmioty
-  label_subject_amount: Ile przedmiotów
+  label_subject_amount: Ile mod./przedm.
   label_subject_add_singular: Dodaj przedmiot
   label_subject_none_added: Nie dodano jeszcze żadnych przedmiotów
   label_subject_syllabus_link: Link do przedmiotu w Syllabusie
   label_elective_block_type_elective_block_n_from_m_subjects: Do wyboru %{n} kursy z %{m}
+  label_elective_block_type_elective_block_block_of_subjects: Do wyboru %{n} bloki przedmiotów z %{m}
   label_elective_block_type_elective_block_n_from_m_subjects_letter: P
+  label_elective_block_type_elective_block_block_of_subjects_letter: B
   label_field_of_study_plural: Kierunki
   label_filter_studies: Studia
   label_filter_semester: Semestr

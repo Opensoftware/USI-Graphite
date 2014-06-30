@@ -22,6 +22,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @elective_blocks = apply_scopes(Graphite::ElectiveBlock, params)
     .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
     .include_peripherals
+    .parents_only
     .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
     @filters = DEFAULT_FILTERS
 
@@ -184,13 +185,17 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .load.sort {|s1, s2| s1.course.name <=> s2.course.name}
     @block_types = Graphite::ElectiveBlock::BlockType.all.sort
     @modules = @elective_block.modules.sort
+    @blocks = @elective_block.elective_blocks.sort
   end
 
   def elective_block_params
     attrs = [:name, :block_type_id, :min_modules_amount, :min_ects_amount,
       :annual_id, :semester_id, :study_ids => [],
       :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
-        :ects_amount, :semester_number]
+        :ects_amount, :semester_number],
+      :elective_blocks_attributes => [:id, :name, :annual_id, :semester_id,
+        :module_ids => []
+      ]
     ]
     if params[:action] =~ /enroll/
       attrs |= [:enrollments_attributes => [:id, :elective_module_id,
