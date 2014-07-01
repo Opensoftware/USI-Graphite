@@ -19,6 +19,10 @@
     </div>
   </div>
 </div>
+<div class="form-group enroll-by-avg-grade" style="<%= 'display: none;' if @elective_block.block_type.try(:choose_n_from_m?) %>">
+  <%= f.check_box :enroll_by_avg_grade %>
+  <%= f.label :enroll_by_avg_grade, t(:label_elective_block_enroll_by_avg_grade) %>
+</div>
 <div class="form-group extra-margin">
   <%= f.label :study_ids, t(:label_studies) %>
   <%= f.select :study_ids, options_for_select(@studies.collect {|s| [[s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?), " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "), s.id] }, @elective_block.study_ids), {}, :class => "form-control", :multiple => "multiple", :required => true, :size => 6 %>

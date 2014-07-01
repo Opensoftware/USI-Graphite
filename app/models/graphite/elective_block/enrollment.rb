@@ -5,10 +5,20 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
   include ::Workflow
 
   workflow_column :state
+  # States:
+  # - pending: newly created enrollment gets this status by default unless
+  # state set manually
+  # - queued: state reserved for block enrollments with 'avg. grade' condition. Such
+  # enrollments are not mantained by 'enrollment dequeue' workers. However, when
+  # enrollments are done, a prioritize worker runs and enroll students
   workflow do
     state :pending do
       event :accept, :transitions_to => :accepted
       event :reject, :transitions_to => :rejected
+      event :queue, :transitions_to => :queued
+    end
+    state :queued do
+      event :accept, :transitions_to => :accepted
     end
     state :accepted
     state :rejected
@@ -21,6 +31,7 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
 
   scope :pending, -> { where(:state => "pending") }
   scope :accepted, -> { where(:state => "accepted") }
+  scope :queued, -> { where(:state => "queued") }
   scope :for_student, ->(student) { where(:student_id => student) }
   scope :for_elective_block, ->(block) { where(:elective_block_id => block) }
   scope :for_subject, ->(subject) {

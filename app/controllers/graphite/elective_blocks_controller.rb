@@ -133,7 +133,9 @@ class Graphite::ElectiveBlocksController < GraphiteController
     authorize! :update, @elective_block
 
     if @elective_block.update(elective_block_params)
-      Resque.enqueue(Graphite::EnrollmentsDequeue, @elective_block.id, current_user.id)
+      unless @elective_block.enroll_by_average_grade?
+        Resque.enqueue(Graphite::EnrollmentsDequeue, @elective_block.id, current_user.id)
+      end
       redirect_to main_app.dashboard_index_path
     end
 
@@ -184,7 +186,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   def elective_block_params
     attrs = [:name, :block_type_id, :min_modules_amount, :min_ects_amount,
-      :annual_id, :semester_id, :study_ids => [],
+      :annual_id, :semester_id, :enroll_by_avg_grade, :study_ids => [],
       :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
         :ects_amount, :semester_number],
       :elective_blocks_attributes => [:id, :name, :min_ects_amount,
@@ -193,9 +195,11 @@ class Graphite::ElectiveBlocksController < GraphiteController
     ]
     if params[:action] =~ /enroll/
       attrs |= [:enrollments_attributes => [:id, :elective_module_id,
-          :student_id, :elective_block_id, :block_id, :enroll, :_destroy]]
+          :student_id, :state, :elective_block_id, :block_id, :enroll,
+          :priority, :_destroy]]
     end
-    params.require(:elective_block).permit(attrs)
+    p = params.require(:elective_block).permit(attrs)
+    p
   end
 
   def pipe_name
@@ -209,9 +213,10 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .for_block(blocks).include_peripherals
     @enrollments = blocks.reduce([]) do |sum, block|
       sum << (student_block_enrollments.detect {|enrollment| enrollment.block == block } ||
-          block.enrollments.build(:block => block,
-          :elective_block => @elective_block,
-          :student => current_user.student))
+          block.enrollments.build({:block => block,
+            :elective_block => @elective_block,
+            :student => current_user.student }
+          .merge(@elective_block.enroll_by_average_grade? ? {state: :queued} : {})))
       sum
     end
   end

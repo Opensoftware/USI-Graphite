@@ -18,11 +18,18 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   has_many :elective_blocks, class_name: 'Graphite::ElectiveBlock::Block',
     dependent: :destroy
   accepts_nested_attributes_for :elective_blocks, :reject_if => lambda { |elective_block|
-    elective_block[:module_ids].blank?
+    elective_block[:module_ids].blank? || elective_block[:name].blank?
   }, allow_destroy: true
   has_many :enrollments, class_name: 'Graphite::ElectiveBlock::Enrollment'
   accepts_nested_attributes_for :enrollments, :reject_if => lambda { |enrollment|
-    enrollment[:enroll] == "0"
+    reject = true
+    if enrollment[:state] == 'queued'
+      reject &&= enrollment[:priority].blank?
+    else
+      reject &&= enrollment[:enroll] == "0"
+      reject &&= enrollment[:priority].present?
+    end
+    reject
   }, allow_destroy: true
   belongs_to :annual
   belongs_to :semester
@@ -62,15 +69,34 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .present?
   end
 
+  def student_queued?(student)
+    enrollments.select("1 AS ONE")
+    .for_student(student)
+    .queued
+    .present?
+  end
+
   def student_enrolled?(student)
     @student_enrolled = {} unless defined?(@student_enrolled)
     return @student_enrolled[student] if @student_enrolled.has_key?(student)
-    @student_enrolled[student] = false
-    if min_modules_amount.present?
-      @student_enrolled[student] = !enrollments_pending?(student) &&
+    @student_enrolled[student] = enrollments.any?
+  end
+
+  def student_accepted?(student)
+    @student_accepted = {} unless defined?(@student_accepted)
+    return @student_accepted[student] if @student_accepted.has_key?(student)
+    @student_accepted[student] = false
+    if enroll_by_average_grade?
+      #TODO
+    elsif min_modules_amount.present?
+      @student_accepted[student] = !enrollments_pending?(student) &&
         enrollments.for_student(student).count == min_modules_amount
     end
-    @student_enrolled[student]
+    @student_accepted[student]
+  end
+
+  def enroll_by_average_grade?
+    enroll_by_avg_grade
   end
 
   def self.include_peripherals

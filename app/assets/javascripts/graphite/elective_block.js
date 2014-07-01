@@ -4,10 +4,15 @@ $(document).ready(function() {
 
   $("select.block-type").change(function() {
     var ctxt = $("div.elective-blocks");
+    var condition = ($(this).find("option:eq("+$(this).prop("selectedIndex")+")").val() ==
+      ctxt.data("block_type_id"));
     ctxt.toggle(function() {
-      return $(this).find("option:eq("+$(this).prop("selectedIndex")+")").val() ==
-      ctxt.data("block_type_id");
+      return condition;
     });
+    $("div.enroll-by-avg-grade").toggle(function() {
+        $(this).find("input[type='checkbox']").attr("disabled", !condition);
+        return condition;
+      });
   });
 
   var send_req = function() {

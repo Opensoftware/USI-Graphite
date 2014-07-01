@@ -7,11 +7,12 @@
         <%= g.disableable_checkbox :enroll, !elective_enrollments_available?, {:checked => !g.object.new_record?, :class => 'require-amount'} %>
       <% end %>
       <%= g.hidden_field :_destroy %>
-
       <%= g.hidden_field :elective_block_id %>
       <%= g.hidden_field :student_id %>
       <%= g.hidden_field :block_id %>
-
+      <% if @elective_block.enroll_by_average_grade? %>
+        <%= g.hidden_field :state %>
+      <% end %>
     </td>
     <td>
       <%= g.object.block.name %>

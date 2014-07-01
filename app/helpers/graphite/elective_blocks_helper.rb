@@ -46,30 +46,44 @@ module Graphite::ElectiveBlocksHelper
   end
 
   def elective_block_enrollments_info
-    if @elective_block.student_enrolled?(current_user.verifable)
-      return content_tag(:div, :class => "alert alert-success") do
-        content_tag :p do
+    if @elective_block.student_accepted?(current_user.verifable)
+      if @elective_block.enroll_by_average_grade?
+        if current_user.verifable.has_queued_enrollments_for_module?(@elective_block)
+          content = alert(:info) do
+            t(elective_enrollments_available? ? :label_elective_block_enrollment_queued_desc_open : :label_elective_block_enrollment_accepted_desc_close)
+          end
+        end
+      else
+        content = alert(:success) do
           t(elective_enrollments_available? ? :label_elective_block_enrollment_accepted_desc_open : :label_elective_block_enrollment_accepted_desc_close)
         end
       end
+      return content
     end
     if !elective_enrollments_available?
       desc = t :label_elective_block_enrollment_unavailable, :from_day => l(current_semester.elective_enrollments_begin), :to_day => l(current_semester.elective_enrollments_end)
     elsif @elective_block.enrollments_pending?(current_user.student)
       desc = t :label_elective_block_enrollment_pending_desc
     elsif @elective_block.block_type.choose_n_from_m?
-      if !@elective_block.student_enrolled?(current_user.student)
+      if !@elective_block.student_accepted?(current_user.student)
         desc = t :label_elective_block_enrollment_n_from_m_incomplete, :subjects => t('misc.subject_count', :count => @elective_block.min_modules_amount)
       end
     else
     end
     if defined?(desc) && desc.present?
-      content_tag :div, :class => "alert alert-info" do
-        content_tag :p do
-          desc
-        end
+      alert(:info) do
+        desc
       end
     end
   end
 
+  private
+
+  def alert(type)
+    content_tag :div, :class => "alert alert-#{type}" do
+      content_tag :p do
+        yield
+      end
+    end
+  end
 end
