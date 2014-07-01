@@ -1,0 +1,37 @@
+<%= f.fields_for :enrollments, block_enrollment do |g| %>
+  <tr class="fat-row">
+    <td>
+      <%= g.disableable_checkbox :enroll, false, {:checked => !g.object.new_record?, :class => 'require-amount'} %>
+      <%= g.hidden_field :_destroy %>
+
+      <%= g.hidden_field :elective_block_id %>
+      <%= g.hidden_field :student_id %>
+      <%= g.hidden_field :block_id %>
+
+    </td>
+    <td>
+      <%= g.object.block.name %>
+    </td>
+    <td>
+      <%=t 'misc.subject_count', :count => g.object.block.modules.length %>
+    </td>
+    <td>
+      <%= "#{t :label_semester}: #{g.object.block.modules.collect(&:semester_number).uniq.sort.join(", ")}" %>
+    </td>
+    <td>
+      <%= g.object.block.modules.collect(&:ects_amount).reduce(&:+) %> ECTS
+    </td>
+  </tr>
+  <% g.object.block.modules.each do |mod| %>
+    <tr>
+      <td colspan="2" style="border: none;"></td>
+      <td><%= mod.name %></td>
+      <td>
+        <%= "#{t :label_semester}: #{mod.semester_number}" %>
+      </td>
+      <td>
+        <%= mod.ects_amount %> ECTS
+      </td>
+    </tr>
+  <% end %>
+<% end %>

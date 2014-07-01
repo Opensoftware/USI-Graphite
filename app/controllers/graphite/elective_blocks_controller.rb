@@ -73,17 +73,8 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .include_peripherals
     .find(params[:id])
     @studies = @elective_block.studies.sort
-    @modules = @elective_block.modules.sort
     if current_user.student?
-      @student_enrollments = Graphite::ElectiveBlock::Enrollment.for_student(current_user.student)
-      .for_subject(@modules).include_peripherals
-      @enrollments = @modules.reduce([]) do |sum, mod|
-        sum << (@student_enrollments.detect {|enrollment| enrollment.elective_module == mod } ||
-            mod.enrollments.build(:elective_module => mod,
-            :elective_block => @elective_block,
-            :student => current_user.student))
-        sum
-      end
+      send("#{@elective_block.block_type.const_name}_enrollments")
     end
   end
 
@@ -196,13 +187,13 @@ class Graphite::ElectiveBlocksController < GraphiteController
       :annual_id, :semester_id, :study_ids => [],
       :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
         :ects_amount, :semester_number],
-      :elective_blocks_attributes => [:id, :name, :annual_id, :semester_id,
-        :module_ids => []
+      :elective_blocks_attributes => [:id, :name, :min_ects_amount,
+        :elective_block_id, :module_ids => []
       ]
     ]
     if params[:action] =~ /enroll/
       attrs |= [:enrollments_attributes => [:id, :elective_module_id,
-          :student_id, :elective_block_id, :enroll, :_destroy]]
+          :student_id, :elective_block_id, :block_id, :enroll, :_destroy]]
     end
     params.require(:elective_block).permit(attrs)
   end
@@ -210,4 +201,33 @@ class Graphite::ElectiveBlocksController < GraphiteController
   def pipe_name
     "graphite.enrollments.student_id.#{current_user.verifable_id}"
   end
+
+  def elective_block_block_of_subjects_enrollments
+    blocks = @elective_block.elective_blocks.sort
+    student_block_enrollments = Graphite::ElectiveBlock::Enrollment
+    .for_student(current_user.student)
+    .for_block(blocks).include_peripherals
+    @enrollments = blocks.reduce([]) do |sum, block|
+      sum << (student_block_enrollments.detect {|enrollment| enrollment.block == block } ||
+          block.enrollments.build(:block => block,
+          :elective_block => @elective_block,
+          :student => current_user.student))
+      sum
+    end
+  end
+
+  def elective_block_n_from_m_subjects_enrollments
+    modules = @elective_block.modules.sort
+    student_module_enrollments = Graphite::ElectiveBlock::Enrollment
+    .for_student(current_user.student)
+    .for_subject(modules).include_peripherals
+    @enrollments = modules.reduce([]) do |sum, mod|
+      sum << (student_module_enrollments.detect {|enrollment| enrollment.elective_module == mod } ||
+          mod.enrollments.build(:elective_module => mod,
+          :elective_block => @elective_block,
+          :student => current_user.student))
+      sum
+    end
+  end
+
 end

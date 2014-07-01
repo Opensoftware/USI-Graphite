@@ -1,0 +1,30 @@
+<%= f.fields_for :enrollments, subject_enrollment do |g| %>
+  <tr style="<%= 'opacity: 0.4;' unless can_enroll_for_subject?(g.object.elective_module) %>">
+    <td>
+      <%= g.disableable_checkbox :enroll, !can_enroll_for_subject?(g.object.elective_module), {:checked => !g.object.new_record?, :class => 'require-amount'} %>
+      <%= g.hidden_field :_destroy %>
+      <% if can_enroll_for_subject?(g.object.elective_module) %>
+        <%= g.hidden_field :elective_block_id %>
+        <%= g.hidden_field :student_id %>
+        <%= g.hidden_field :elective_module_id %>
+      <% end %>
+    </td>
+    <td>
+      <%= g.object.elective_module.name %>
+    </td>
+    <td>
+      <%= g.object.elective_module.employee.full_name %>
+    </td>
+    <td>
+      <% if g.object.elective_module.try(:student_amount).present? %>
+        <%= "#{g.object.elective_module.enrolled_students}/#{g.object.elective_module.student_amount}" %>
+      <% else %>
+        -
+      <% end %>
+    </td>
+    <td>
+      <%= g.object.elective_module.ects_amount %>
+      ECTS
+    </td>
+  </tr>
+<% end %>

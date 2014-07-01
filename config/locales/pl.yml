@@ -31,6 +31,7 @@ pl:
   label_elective_block_block_none_added: Nie dodano jeszcze żadnych bloków
   label_elective_block_student_enroll: Zapisz się
   label_elective_block_student_choose_elective_block_n_from_m_subjects: Wybór przedmiotów
+  label_elective_block_student_choose_elective_block_block_of_subjects: Wybór bloków obieralnych
   label_elective_block_enrollment_pending: Przetwarzane, zaczekaj chwilę
   label_elective_block_enrollment_accepted: Zaakceptowane
   label_elective_block_enrollment_partial_accepted: Dokończ zapisy
