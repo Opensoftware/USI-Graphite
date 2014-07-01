@@ -66,11 +66,9 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     @student_enrolled = {} unless defined?(@student_enrolled)
     return @student_enrolled[student] if @student_enrolled.has_key?(student)
     @student_enrolled[student] = false
-    if block_type.choose_n_from_m?
-      if min_modules_amount.present?
-        @student_enrolled[student] = !enrollments_pending?(student) &&
-          enrollments.for_student(student).count == min_modules_amount
-      end
+    if min_modules_amount.present?
+      @student_enrolled[student] = !enrollments_pending?(student) &&
+        enrollments.for_student(student).count == min_modules_amount
     end
     @student_enrolled[student]
   end

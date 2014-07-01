@@ -49,6 +49,7 @@ pl:
   label_elective_block_type_elective_block_block_of_subjects: Do wyboru %{counted_blocks} z %{m}
   label_elective_block_type_elective_block_n_from_m_subjects_letter: P
   label_elective_block_type_elective_block_block_of_subjects_letter: B
+  label_elective_block_block_of_subjects_default_explanation: Zapisy na bloki obieralne polegają na określaniu priorytetów zapisów. 
   label_field_of_study_plural: Kierunki
   label_filter_studies: Studia
   label_filter_semester: Semestr

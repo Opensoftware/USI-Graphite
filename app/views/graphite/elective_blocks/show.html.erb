@@ -72,33 +72,40 @@
       </h5>
       <hr>
     </div>
+    <div>
+      <p>
+        <%= elective_block_enrollments_explanation %>
+      </p>
+    </div>
     <%= elective_block_enrollments_info %>
-    <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
-      <table class="table-list">
-        <% if @elective_block.block_type.choose_n_from_m? %>
-          <thead>
-            <tr>
-              <th colspan="5">
-                <%=t :label_subject_plural %>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render :partial => "subject_enrollment", :collection => @enrollments, :locals => {:f => f} %>
-          </tbody>
-        <% elsif @elective_block.block_type.block_of_subjects? %>
-          <thead>
-            <tr>
-              <th colspan="5">
-                <%=t :label_elective_block_block_plural %>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render :partial => "block_enrollment", :collection => @enrollments, :locals => {:f => f} %>
-          </tbody>
-        <% end %>
-      </table>
+  <% end %>
+  <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
+    <table class="table-list">
+      <% if @elective_block.block_type.choose_n_from_m? %>
+        <thead>
+          <tr>
+            <th colspan="5">
+              <%=t :label_subject_plural %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render :partial => "#{current_user.verifable_type.downcase}_subject", :collection => current_user.student? ? @enrollments : @elective_block.modules, :locals => {:f => f} %>
+        </tbody>
+      <% elsif @elective_block.block_type.block_of_subjects? %>
+        <thead>
+          <tr>
+            <th colspan="6">
+              <%=t :label_elective_block_block_plural %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render :partial => "#{current_user.verifable_type.downcase}_block", :collection => current_user.student? ? @enrollments : @elective_block.elective_blocks, :locals => {:f => f} %>
+        </tbody>
+      <% end %>
+    </table>
+    <% if @enrollments.present? %>
       <div class="pull-right">
         <% if @elective_block.enrollments_pending?(current_user.student) %>
           <span style="padding-right: 1em;">

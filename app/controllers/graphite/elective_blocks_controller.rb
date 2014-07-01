@@ -230,4 +230,13 @@ class Graphite::ElectiveBlocksController < GraphiteController
     end
   end
 
+  def employee_elective_block_block_of_subjects
+    @elective_block = @elective_block.includes(:elective_blocks =>
+        [:translations, :modules => :translations]).find(params[:id])
+  end
+
+  def employee_elective_block_n_from_m_subjects
+    @elective_block = @elective_block.find(params[:id])
+  end
+
 end

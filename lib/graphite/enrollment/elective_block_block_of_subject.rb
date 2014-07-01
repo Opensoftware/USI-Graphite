@@ -1,6 +1,6 @@
 require 'graphite/enrollment/processor'
 
-class Graphite::Enrollment::ElectiveBlockNFromMSubject < Graphite::Enrollment::Processor
+class Graphite::Enrollment::ElectiveBlockBlockOfSubject < Graphite::Enrollment::Processor
 
   def initialize(elective_block, student)
     super(elective_block, student)
@@ -8,8 +8,7 @@ class Graphite::Enrollment::ElectiveBlockNFromMSubject < Graphite::Enrollment::P
   end
 
   protected
-  
   def partial
-    'graphite/dashboard/elective_subjects'
+    'graphite/dashboard/elective_blocks'
   end
 end

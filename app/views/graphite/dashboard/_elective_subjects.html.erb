@@ -1,6 +1,6 @@
 <div class="elective-subjects">
   <% elective_block.modules.sort.each do |mod| %>
-    <div class="row" style="<%= 'opacity: 0.3;' if elective_block.student_enrolled?(student) && elective_module_enrollments.none? {|enrollment| enrollment.elective_module_id == mod.id } %>">
+    <div class="row" style="<%= 'opacity: 0.3;' if elective_block.student_enrolled?(student) && enrollments.none? {|enrollment| enrollment.elective_module_id == mod.id } %>">
       <div class="col-md-4">
         <p>
           <%= mod.name %>

@@ -1,3 +1,5 @@
+require 'graphite/enrollment/elective_block_block_of_subject.rb'
+
 class Graphite::EnrollmentsDequeue
   @queue = :graphite_enrollments
 
@@ -7,7 +9,7 @@ class Graphite::EnrollmentsDequeue
 
     processor = Graphite::Enrollment.const_get(elective_block.block_type.const_name.classify)
     .new(elective_block, student)
-    processor.process
+    processor.perform
 
   end
 
