@@ -1,5 +1,5 @@
 <div class="elective-subjects">
-  <% elective_block.elective_blocks.sort.each do |block| %>
+  <% elective_block.elective_blocks.delete_if {|block| elective_block.student_accepted?(student) && enrollments.none? {|enrollment| enrollment.block_id == block.id } }.sort.each do |block| %>
     <div class="row">
       <div class="col-md-13">
         <p>

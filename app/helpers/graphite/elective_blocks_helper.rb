@@ -47,15 +47,20 @@ module Graphite::ElectiveBlocksHelper
 
   def elective_block_enrollments_info
     if @elective_block.student_accepted?(current_user.verifable)
+      content = alert(:success) do
+        t(elective_enrollments_available? ? :label_elective_block_enrollment_accepted_desc_open : :label_elective_block_enrollment_accepted_desc_close)
+      end
+      return content
+    elsif @elective_block.student_enrolled?(current_user.verifable)
       if @elective_block.enroll_by_average_grade?
         if current_user.verifable.has_queued_enrollments_for_module?(@elective_block)
-          content = alert(:info) do
+          content = alert(:success) do
             t(elective_enrollments_available? ? :label_elective_block_enrollment_queued_desc_open : :label_elective_block_enrollment_accepted_desc_close)
           end
         end
       else
-        content = alert(:success) do
-          t(elective_enrollments_available? ? :label_elective_block_enrollment_accepted_desc_open : :label_elective_block_enrollment_accepted_desc_close)
+        content = alert(:info) do
+          t(:label_elective_block_enrollment_pending_desc)
         end
       end
       return content
@@ -68,6 +73,8 @@ module Graphite::ElectiveBlocksHelper
       if !@elective_block.student_accepted?(current_user.student)
         desc = t :label_elective_block_enrollment_n_from_m_incomplete, :subjects => t('misc.subject_count', :count => @elective_block.min_modules_amount)
       end
+    elsif @elective_block.block_type.block_of_subjects?
+      desc = t :label_elective_block_block_of_subjects_incomplete, :subjects => t('misc.block_count', :count => @elective_block.min_modules_amount)
     else
     end
     if defined?(desc) && desc.present?

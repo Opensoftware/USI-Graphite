@@ -72,11 +72,6 @@
       </h5>
       <hr>
     </div>
-    <div>
-      <p>
-        <%= elective_block_enrollments_explanation %>
-      </p>
-    </div>
     <%= elective_block_enrollments_info %>
   <% end %>
   <%= form_for @elective_block, :builder => DisableableFormBuilder, :url => enroll_elective_block_path(@elective_block), :html => { :class => "enrollments-form" } do |f| %>
