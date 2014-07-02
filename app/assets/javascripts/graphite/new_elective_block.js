@@ -3,10 +3,13 @@ $(document).ready(function() {
   var base_validation_handler = base_validation_form.validate();
 
   $("input.save-subject").click(function() {
-    $("input.lazy-validate").each(function() {
+    $("input.lazy-validate", "div.elective-subjects").each(function() {
       $(this).rules("add", {
         required:true
       });
+    });
+    $("input.lazy-validate, select.lazy-validate", "div.elective-blocks").each(function() {
+      $(this).rules("remove");
     });
 
     if(base_validation_handler.form()) {
