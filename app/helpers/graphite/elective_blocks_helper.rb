@@ -13,7 +13,7 @@ module Graphite::ElectiveBlocksHelper
     @studies_filter = [[t(:label_all), nil]] | Studies
     .include_peripherals
     .load
-    .sort.collect {|s| [[s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?),
+    .sort.collect {|s| [[s.course.name, *("(#{s.specialization.name})" if s.specialty_id.present?),
           " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "),
         s.id]}
   end

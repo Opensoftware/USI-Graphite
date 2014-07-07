@@ -25,7 +25,7 @@
 </div>
 <div class="form-group extra-margin">
   <%= f.label :study_ids, t(:label_studies) %>
-  <%= f.select :study_ids, options_for_select(@studies.collect {|s| [[s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?), " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "), s.id] }, @elective_block.study_ids), {}, :class => "form-control", :multiple => "multiple", :required => true, :size => 6 %>
+  <%= f.select :study_ids, options_for_select(@studies.collect {|s| [[s.course.name, " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}", *("(#{s.specialization.name})" if s.specialty_id.present?)].join(" "), s.id] }, @elective_block.study_ids), {}, :class => "form-control", :multiple => "multiple", :required => true, :size => 6 %>
 </div>
 <div class="section-header extra-margin">
   <h5>

@@ -54,7 +54,7 @@
         </div>
         <div class="col-md-14">
           <h6 class="text-list">
-            <%=raw elective_block.studies.collect {|s| [s.course.name, *("(#{s.specialty.name})" if s.specialty_id.present?), " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" ") }.join(", <br>") %>
+            <%=raw elective_block.studies.collect {|s| [s.course.name, *("(#{s.specialization.name})" if s.specialty_id.present?), " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" ") }.join(", <br>") %>
           </h6>
         </div>
       </div>
