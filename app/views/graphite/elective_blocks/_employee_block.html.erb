@@ -1,0 +1,34 @@
+<tr class="fat-row">
+  <td>
+    <%= employee_block.name %>
+  </td>
+  <td>
+    <%=t 'misc.subject_count', :count => employee_block.modules.length %>
+  </td>
+  <td>
+    <%= "#{t :label_semester}: #{employee_block.modules.collect(&:semester_number).uniq.sort.join(", ")}" %>
+  </td>
+  <% if employee_block.student_amount.present? %>
+    <td>
+      <%=t "misc.place_count", :count => employee_block.student_amount %>
+    </td>
+  <% end %>
+  <td>
+    <%= employee_block.modules.collect(&:ects_amount).reduce(&:+) %> ECTS
+  </td>
+</tr>
+<% employee_block.modules.sort_by {|mod| mod.semester_number}.each do |mod| %>
+  <tr>
+    <td style="border: none;"></td>
+    <td><%= mod.name %></td>
+    <td>
+      <%= "#{t :label_semester}: #{mod.semester_number}" %>
+    </td>
+    <% if employee_block.student_amount.present? %>
+      <td></td>
+    <% end %>
+    <td>
+      <%= mod.ects_amount %> ECTS
+    </td>
+  </tr>
+<% end %>

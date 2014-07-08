@@ -1,4 +1,4 @@
-<%= f.fields_for :enrollments, block_enrollment do |g| %>
+<%= f.fields_for :enrollments, student_block do |g| %>
   <tr class="fat-row">
     <td>
       <% if @elective_block.enroll_by_average_grade? %>
@@ -25,7 +25,7 @@
     </td>
     <% if g.object.block.student_amount.present? %>
       <td>
-        <%= "#{ g.object.block.enrolled_students}/#{t( "misc.place_count", :count => g.object.block.student_amount)}" %>
+        <%= "#{g.object.block.student_amount.to_i - g.object.block.enrolled_students}/#{t( "misc.place_count", :count => g.object.block.student_amount)}" %>
       </td>
     <% end %>
     <td>
@@ -39,6 +39,9 @@
       <td>
         <%= "#{t :label_semester}: #{mod.semester_number}" %>
       </td>
+      <% if g.object.block.student_amount.present? %>
+        <td></td>
+      <% end %>
       <td>
         <%= mod.ects_amount %> ECTS
       </td>

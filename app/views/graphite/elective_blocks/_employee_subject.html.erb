@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    <%= employee_subject.name %>
+  </td>
+  <td>
+    <%= employee_subject.employee.full_name %>
+  </td>
+  <td>
+    <% if employee_subject.try(:student_amount).present? %>
+      <%= "#{employee_subject.enrolled_students}/#{employee_subject.student_amount}" %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td>
+    <%= employee_subject.ects_amount %>
+    ECTS
+  </td>
+</tr>

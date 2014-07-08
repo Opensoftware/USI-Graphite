@@ -8,6 +8,10 @@ pl:
       zero: 0 bloków
       one: 1 blok przedmiotów
       other: "%{count} bloki przedmiotów"
+    place_count:
+      zero: 0 miejsc
+      one: 1 miejsce
+      other: "%{count} miejsc"
   label_elective_block_add: Dodaj moduł obieralny
   label_elective_block_add_plural: Dodaj moduły obieralne
   label_elective_block_found: Znaleziono %{x} wyników dla zadanych kryteriów. Strona %{current_page} z %{total_pages}

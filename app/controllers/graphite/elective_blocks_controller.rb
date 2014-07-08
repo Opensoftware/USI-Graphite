@@ -71,11 +71,9 @@ class Graphite::ElectiveBlocksController < GraphiteController
   def show
     @elective_block = Graphite::ElectiveBlock
     .include_peripherals
-    .find(params[:id])
+    send("#{current_user.verifable_type.downcase}_#{Graphite::ElectiveBlock
+      .find(params[:id]).block_type.const_name}")
     @studies = @elective_block.studies.sort
-    if current_user.student?
-      send("#{@elective_block.block_type.const_name}_enrollments")
-    end
   end
 
   def edit
@@ -198,15 +196,15 @@ class Graphite::ElectiveBlocksController < GraphiteController
           :student_id, :state, :elective_block_id, :block_id, :enroll,
           :priority, :_destroy]]
     end
-    p = params.require(:elective_block).permit(attrs)
-    p
+    params.require(:elective_block).permit(attrs)
   end
 
   def pipe_name
     "graphite.enrollments.student_id.#{current_user.verifable_id}"
   end
 
-  def elective_block_block_of_subjects_enrollments
+  def student_elective_block_block_of_subjects
+    @elective_block = @elective_block.find(params[:id])
     blocks = @elective_block.elective_blocks.sort
     student_block_enrollments = Graphite::ElectiveBlock::Enrollment
     .for_student(current_user.student)
@@ -221,7 +219,8 @@ class Graphite::ElectiveBlocksController < GraphiteController
     end
   end
 
-  def elective_block_n_from_m_subjects_enrollments
+  def student_elective_block_n_from_m_subjects
+    @elective_block = @elective_block.find(params[:id])
     modules = @elective_block.modules.sort
     student_module_enrollments = Graphite::ElectiveBlock::Enrollment
     .for_student(current_user.student)
