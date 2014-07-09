@@ -1,4 +1,12 @@
 $(document).ready(function() {
+  $(".button-delete").click(function() {
+    $(this).yesnoDialog({
+      topic: $.i18n._('confirmation_elective_block_delete')
+    });
+    $(this).yesnoDialog("show");
+    return false;
+  });
+
   $.validator.addMethod('require-amount', function (value) {
     var size = $('.require-amount:checked').size();
     return size == $("h6.block-type").data("elective-block-subjects-amount");

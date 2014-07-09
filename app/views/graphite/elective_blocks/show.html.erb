@@ -1,6 +1,23 @@
 <% content_for :additional_javascripts do %>
   <%= javascript_include_tag 'graphite/show_elective_block' %>
 <% end %>
+<% if can?(:manage, @elective_block) %>
+  <% content_for :right_column do %>
+    <div class="row">
+      <div class="col-md-11"></div>
+      <div class="col-md-2">
+        <%= button_to elective_block_path(@elective_block), :method => :delete, :class => 'button-small button-small-red button-delete has-tooltip', :type => :button, 'data-toggle'=>"tooltip", 'data-placement'=>"top", :title=>t(:label_remove) do %>
+          <%= content_tag :i, nil, :class => 'icon icon-white icon-delete' %>
+        <% end %>
+      </div>
+      <div class="col-md-3">
+        <%= link_to edit_elective_block_path(@elective_block), :class => 'button-small button-small-navy has-tooltip', 'data-toggle'=>"tooltip", 'data-placement'=>"top", :title => t(:label_edit) do %>
+          <%= content_tag :i, nil, :class => 'icon icon-white icon-pen' %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 <div>
   <div class="row">
     <div class="col-md-1">
