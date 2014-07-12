@@ -113,6 +113,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
     Graphite::ElectiveBlock.transaction do
       begin
+        @elective_block_ids = @elective_blocks.reduce({}) {|sum, el| sum[el.id] = el.id; sum }
         @elective_blocks.destroy_all
       rescue
         @action_performed = false

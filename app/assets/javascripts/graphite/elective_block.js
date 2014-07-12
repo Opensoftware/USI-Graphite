@@ -64,7 +64,7 @@ $(document).ready(function() {
   });
 
   $("input.save-and-close").click(function() {
-    var context = $(this).closest("form");
+    var context = $("form.elective-block");
     $("input.lazy-validate, select.lazy-validate").each(function() {
       $(this).rules("remove");
     });

@@ -1,1 +1,1 @@
-<%= raw( {:success => @action_performed, :objects => @elective_blocks.reduce({}) {|sum, el| sum[el.id] = el.id; sum } }.to_json) %>
+<%= raw( {:success => @action_performed, :objects => @elective_block_ids }.to_json) %>
