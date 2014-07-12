@@ -47,6 +47,7 @@ class Graphite::Enrollment::Processor
           accepted_enrollments.length).each(&:accept!)
       Graphite::ElectiveBlock::Enrollment
       .where(:id => pending_enrollments).destroy_all
+      student_enrollments.reload
     end
   end
 

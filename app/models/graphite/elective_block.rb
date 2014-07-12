@@ -27,7 +27,6 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
       reject &&= enrollment[:priority].blank?
     else
       reject &&= enrollment[:enroll] == "0"
-      reject &&= enrollment[:priority].present?
     end
     reject
   }, allow_destroy: true
