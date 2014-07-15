@@ -39,6 +39,12 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
     .joins(:modules)
     .where("#{Graphite::ElectiveBlock::ElectiveModule.table_name}.semester_number" => semester)
   end
+  scope :for_student_semester, ->(semester) do
+    select("DISTINCT #{Graphite::ElectiveBlock.table_name}.*")
+    .joins(:modules)
+    .group("#{Graphite::ElectiveBlock.table_name}.id")
+    .having("MIN(#{Graphite::ElectiveBlock::ElectiveModule.table_name}.semester_number) IN (?)", semester)
+  end
   scope :by_semester, ->(semester) { for_semester(semester) }
   scope :by_studies, ->(studies) do
     joins(:studies)
