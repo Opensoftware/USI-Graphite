@@ -74,12 +74,16 @@ module Graphite::ElectiveBlocksHelper
         desc = t :label_elective_block_enrollment_n_from_m_incomplete, :subjects => t('misc.subject_count', :count => @elective_block.min_modules_amount)
       end
     elsif @elective_block.block_type.block_of_subjects?
-      desc = t :label_elective_block_block_of_subjects_incomplete, :subjects => t('misc.block_count', :count => @elective_block.min_modules_amount)
+      if @elective_block.enroll_by_average_grade?
+        desc = t :label_elective_block_block_of_subjects_avg_grade_incomplete, :blocks => t('misc.block_count', :count => @elective_block.min_modules_amount)
+      else
+        desc = t :label_elective_block_block_of_subjects_incomplete, :blocks => t('misc.block_count', :count => @elective_block.min_modules_amount)
+      end
     else
     end
     if defined?(desc) && desc.present?
       alert(:info) do
-        desc
+        raw desc
       end
     end
   end
