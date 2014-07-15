@@ -52,7 +52,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   end
   scope :by_annual, ->(annual) { where(:annual_id => annual) }
   scope :by_block_type, ->(block_type) { where(:block_type_id => block_type) }
-  scope :parents_only, -> { where("elective_block_id IS NULL") }
+  scope :parents_only, -> { where("#{Graphite::ElectiveBlock.table_name}.elective_block_id IS NULL") }
   scope :for_student, ->(student) do
     joins(:elective_block_studies)
     .where("#{Graphite::ElectiveBlockStudies.table_name}.studies_id IN (?)",
