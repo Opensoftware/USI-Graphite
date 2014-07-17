@@ -95,20 +95,20 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   end
 
   def student_accepted?(student)
-    @student_accepted = {} unless defined?(@student_accepted)
-    return @student_accepted[student] if @student_accepted.has_key?(student)
-    @student_accepted[student] = false
-    if enroll_by_average_grade?
-      #TODO
-    elsif min_modules_amount.present?
-      @student_accepted[student] = !enrollments_pending?(student) &&
-        enrollments.for_student(student).count == min_modules_amount
+    student_accepted =
+      enrollments.for_student(student).accepted.count == min_modules_amount
+    unless enroll_by_average_grade?
+      student_accepted &&= !enrollments_pending?(student)
     end
-    @student_accepted[student]
+    student_accepted
   end
 
   def enroll_by_average_grade?
     enroll_by_avg_grade
+  end
+
+  def scheduling_needed?
+    enroll_by_average_grade? && enrollments.queued.any?
   end
 
   def self.include_peripherals

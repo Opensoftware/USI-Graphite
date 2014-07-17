@@ -4,12 +4,19 @@
 <% if can?(:manage, @elective_block) %>
   <% content_for :right_column do %>
     <div class="row">
-      <div class="col-md-11"></div>
+      <div class="col-md-8"></div>
       <div class="col-md-2">
         <%= button_to elective_block_path(@elective_block), :method => :delete, :class => 'button-small button-small-red button-delete has-tooltip', :type => :button, 'data-toggle'=>"tooltip", 'data-placement'=>"top", :title=>t(:label_remove) do %>
           <%= content_tag :i, nil, :class => 'icon icon-white icon-delete' %>
         <% end %>
       </div>
+      <% if @elective_block.enroll_by_average_grade? %>
+        <div class="col-md-2">
+          <%= link_to graphite.perform_scheduling_elective_block_path(@elective_block), :class => ['button-small button-small-navy button-perform-scheduling has-tooltip', *("disabled" unless @elective_block.scheduling_needed?)].join(" "), 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'data-method' => :patch, :title => t(@elective_block.scheduling_needed? ? :label_schedule_perform : :label_schedule_not_needed) do %>
+            <%= content_tag :i, nil, :class => 'icon icon-white icon-manage' %>
+          <% end %>
+        </div>
+      <% end %>
       <div class="col-md-3">
         <%= link_to edit_elective_block_path(@elective_block), :class => 'button-small button-small-navy has-tooltip', 'data-toggle'=>"tooltip", 'data-placement'=>"top", :title => t(:label_edit) do %>
           <%= content_tag :i, nil, :class => 'icon icon-white icon-pen' %>
@@ -102,18 +109,18 @@
           </tr>
         </thead>
         <tbody>
-          <%= render :partial => "#{current_user.verifable_type.downcase}_subject", :collection => current_user.student? ? @enrollments : @elective_block.modules, :locals => {:f => f} %>
+          <%= render :partial => "#{current_user.verifable_type.downcase}_subject", :collection => current_user.student? ? @enrollments : @elective_block.modules.sort, :locals => {:f => f} %>
         </tbody>
       <% elsif @elective_block.block_type.block_of_subjects? %>
         <thead>
           <tr>
-            <th colspan="6">
+            <th colspan="7">
               <%=t :label_elective_block_block_plural %>
             </th>
           </tr>
         </thead>
         <tbody>
-          <%= render :partial => "#{current_user.verifable_type.downcase}_block", :collection => current_user.student? ? @enrollments : @elective_block.elective_blocks, :locals => {:f => f} %>
+          <%= render :partial => "#{current_user.verifable_type.downcase}_block", :collection => current_user.student? ? @enrollments : @elective_block.elective_blocks.sort, :locals => {:f => f} %>
         </tbody>
       <% end %>
     </table>
@@ -128,5 +135,21 @@
       </div>
       <div class="clearfix"></div>
     <% end %>
+  <% end %>
+  <% if can?(:manage, @elective_block) %>
+    <div class="section-header extra-margin">
+      <h5>
+        <%=t :label_enrollment_accepted_plural %>
+      </h5>
+      <hr>
+    </div>
+    <table class="table-list">
+      <% if @elective_block.block_type.choose_n_from_m? %>
+      <% elsif @elective_block.block_type.block_of_subjects? %>
+        <tbody>
+          <%= render :partial => "employee_block_result", :collection => @elective_block.elective_blocks.sort %>
+        </tbody>
+      <% end %>
+    </table>
   <% end %>
 </div>

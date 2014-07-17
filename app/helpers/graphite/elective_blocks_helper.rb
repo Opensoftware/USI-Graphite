@@ -88,6 +88,19 @@ module Graphite::ElectiveBlocksHelper
     end
   end
 
+  def student_enrollment_status(enrollment)
+    if (status = @student_block_enrollments.detect {|e| e.block_id == enrollment.block_id}.try(:state)).present?
+      klazz = case status
+      when 'rejected' then 'text-danger'
+      when 'accepted' then 'text-success'
+      else ''
+      end
+      content_tag(:span, :class => klazz) do
+        t("label_enrollment_state_#{status}")
+      end
+    end
+  end
+
   private
 
   def alert(type)

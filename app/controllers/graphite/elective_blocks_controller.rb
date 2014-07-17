@@ -11,7 +11,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   DEFAULT_FILTERS = {:block_type => :block_type_id, :studies => :studies_id, :semester => :semester_number, :annual => :annual_id}.freeze
 
-  authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe]
+  authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe, :perform_scheduling]
   skip_authorization_check [:event_pipe]
 
   helper_method :pipe_name
@@ -127,6 +127,15 @@ class Graphite::ElectiveBlocksController < GraphiteController
     end
   end
 
+  def perform_scheduling
+    @elective_block = Graphite::ElectiveBlock.find(params[:id])
+    authorize! :update, @elective_block
+
+    Resque.enqueue(Graphite::EnrollmentsScheduler, @elective_block.id)
+
+    redirect_to graphite.elective_blocks_path
+  end
+
   def enroll
     @elective_block = Graphite::ElectiveBlock.find(params[:id])
     authorize! :update, @elective_block
@@ -206,12 +215,16 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   def student_elective_block_block_of_subjects
     @elective_block = @elective_block.find(params[:id])
-    blocks = @elective_block.elective_blocks.sort
-    student_block_enrollments = Graphite::ElectiveBlock::Enrollment
+    blocks = @elective_block.elective_blocks
+    .includes(:translations, :modules => :translations)
+    .sort
+    @student_block_enrollments = Graphite::ElectiveBlock::Enrollment
     .for_student(current_user.student)
     .for_block(blocks).include_peripherals
+    .not_versioned
+    .includes(:block => [:translations, :modules => :translations])
     @enrollments = blocks.reduce([]) do |sum, block|
-      sum << (student_block_enrollments.detect {|enrollment| enrollment.block == block } ||
+      sum << (@student_block_enrollments.detect {|enrollment| enrollment.block == block } ||
           block.enrollments.build({:block => block,
             :elective_block => @elective_block,
             :student => current_user.student }

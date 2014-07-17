@@ -72,6 +72,13 @@
               <%= content_tag :i, nil, :class => 'icon icon-white icon-pen' %>
             <% end %>
           </div>
+          <% if elective_block.enroll_by_average_grade? %>
+            <div class="col-md-3">
+              <%= link_to graphite.perform_scheduling_elective_block_path(elective_block), :class => ['button-small button-small-navy button-perform-scheduling has-tooltip', *("disabled" unless elective_block.scheduling_needed?)].join(" "), 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'data-method' => :patch, :title => t(elective_block.scheduling_needed? ? :label_schedule_perform : :label_schedule_not_needed) do %>
+                <%= content_tag :i, nil, :class => 'icon icon-white icon-manage' %>
+              <% end %>
+            </div>
+          <% end %>
           <div class="col-md-3">
             <%= button_tag :class => 'button-small button-small-checkbox button-checkbox', :type => :button do %>
             <% end %>

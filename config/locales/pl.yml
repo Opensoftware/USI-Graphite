@@ -12,6 +12,10 @@ pl:
       zero: 0 miejsc
       one: 1 miejsce
       other: "%{count} miejsc"
+    reservation_count:
+      zero: 0 rezerwacji
+      one: 1 rezerwacja
+      other: "%{count} rezerwacji"
   label_elective_block_add: Dodaj moduł obieralny
   label_elective_block_add_plural: Dodaj moduły obieralne
   label_elective_block_found: Znaleziono %{x} wyników dla zadanych kryteriów. Strona %{current_page} z %{total_pages}
@@ -49,6 +53,8 @@ pl:
   label_elective_block_block_of_subjects_avg_grade_incomplete: "Twoje wybory przedmiotów obieralnych są niekompletne, wybierz %{blocks}. Pamiętaj też, że dla każdego bloku musisz określić priorytet zapisów, który wskazuje na Twoje preferencje zapisu do danego bloku. <br><br>Im niższa liczba, tym wyższy priorytet zapisów. Nie przypisuj takiej samej liczby do różnych bloków - dla danej liczby pod uwagę brany jest tylko pierwszy blok. <br><br>Jeżeli jakiś blok w ogóle Cię nie interesuje, wówczas nie określaj dla niego żadnego priorytetu - nie będzie on brany pod uwagę podczas szeregowania.<br><br>Szeregowanie odbywa się na podstawie Twojej liczby punktów ECTS, potem średniej ze studiów, a dopiero na końcu w/g określonych przez Ciebie priorytetów. Jeżeli masz wątpliwość, że możesz się nie dostać na jakiś blok, określ priorytety dla większej liczby bloków."
   label_elective_block_block_of_subjects_incomplete: Twoje wybory przedmiotów obieralnych są niekompletne. Musisz wybrać dokładnie %{blocks}
   label_elective_block_enrollment_unavailable: Zapisy na przedmioty obieralne trwają od %{from_day} do %{to_day}
+  label_schedule_perform: Wykonaj szeregowanie
+  label_schedule_not_needed: Brak zgłoszeń do szeregowania
   label_subject_plural: Przedmioty
   label_subject_amount: Ile mod./przedm.
   label_subject_add_singular: Dodaj przedmiot
@@ -62,3 +68,8 @@ pl:
   label_filter_studies: Studia
   label_filter_semester: Semestr
   label_filter_block_type: Typ modułu
+  label_enrollment_accepted_plural: Zaakceptowane zgłoszenia
+  label_enrollment_accepted_empty: Brak zaakceptowanych zgłoszeń
+  label_enrollment_state_rejected: Odrzucone
+  label_enrollment_state_accepted: Zaakceptowane
+  label_enrollment_state_queued: Oczekujące na szeregowanie

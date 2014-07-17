@@ -34,6 +34,7 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
   scope :pending, -> { where(:state => "pending") }
   scope :accepted, -> { where(:state => "accepted") }
   scope :queued, -> { where(:state => "queued") }
+  scope :queued_or_accepted, -> { where(:state => ["queued", "accepted"]) }
   scope :not_versioned, -> {where("version" => nil)}
   scope :for_student, ->(student) { where(:student_id => student) }
   scope :for_elective_block, ->(block) { where(:elective_block_id => block) }

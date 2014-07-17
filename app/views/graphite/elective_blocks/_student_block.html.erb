@@ -25,9 +25,20 @@
     </td>
     <% if g.object.block.student_amount.present? %>
       <td>
-        <%= "#{g.object.block.student_amount.to_i - g.object.block.enrolled_students}/#{t( "misc.place_count", :count => g.object.block.student_amount)}" %>
+        <% if @elective_block.enroll_by_average_grade? %>
+          <p>
+            <%=t('misc.reservation_count', :count => g.object.block.enrollments.queued_or_accepted.count) %>
+            <br>
+            <%=t( "misc.place_count", :count => g.object.block.student_amount) %>
+          </p>
+        <% else %>
+          <%= "#{g.object.block.student_amount.to_i - g.object.block.enrolled_students}/#{t( "misc.place_count", :count => g.object.block.student_amount)}" %>
+        <% end %>
       </td>
     <% end %>
+    <td>
+      <%= student_enrollment_status(g.object) %>
+    </td>
     <td>
       <%= g.object.block.modules.collect(&:ects_amount).reduce(&:+) %> ECTS
     </td>
@@ -42,6 +53,7 @@
       <% if g.object.block.student_amount.present? %>
         <td></td>
       <% end %>
+      <td></td>
       <td>
         <%= mod.ects_amount %> ECTS
       </td>

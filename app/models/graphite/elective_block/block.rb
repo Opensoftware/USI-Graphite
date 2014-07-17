@@ -10,5 +10,12 @@ class Graphite::ElectiveBlock::Block < ActiveRecord::Base
     class_name: "Graphite::ElectiveBlock::ElectiveModule", source: :elective_module
   has_many :enrollments, class_name: "Graphite::ElectiveBlock::Enrollment",
     dependent: :destroy
+  has_many :accepted_students,
+    -> { where("#{Graphite::ElectiveBlock::Enrollment.table_name}.state" => 'accepted') },
+    through: :enrollments, source: :student
+
+  def enrollment_for_student(student)
+    enrollments.where(student_id: student).not_versioned.first
+  end
 
 end

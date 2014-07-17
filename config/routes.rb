@@ -9,6 +9,7 @@ Graphite::Engine.routes.draw do
     end
     member do
       patch :enroll
+      patch :perform_scheduling
     end
 
     resources :modules

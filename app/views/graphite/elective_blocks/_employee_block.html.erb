@@ -10,7 +10,15 @@
   </td>
   <% if employee_block.student_amount.present? %>
     <td>
-      <%=t "misc.place_count", :count => employee_block.student_amount %>
+      <% if @elective_block.enroll_by_average_grade? %>
+        <p>
+          <%=t('misc.reservation_count', :count => employee_block.enrollments.queued_or_accepted.count) %>
+          <br>
+          <%=t( "misc.place_count", :count => employee_block.student_amount) %>
+        </p>
+      <% else %>
+        <%= "#{employee_block.student_amount.to_i - employee_block.enrolled_students}/#{t( "misc.place_count", :count => employee_block.student_amount)}" %>
+      <% end %>
     </td>
   <% end %>
   <td>

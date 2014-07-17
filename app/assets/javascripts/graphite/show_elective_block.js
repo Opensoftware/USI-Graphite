@@ -6,6 +6,27 @@ $(document).ready(function() {
     $(this).yesnoDialog("show");
     return false;
   });
+  $("a.button-perform-scheduling").click(function() {
+    if(!$(this).hasClass("disabled")) {
+      $(this).yesnoDialogRemote({
+        topic: $.i18n._('confirmation_elective_blocks_scheduler'),
+        confirmation_action: function() {
+          var that = this;
+          this.footer.find("button.btn-confirmation").click(function() {
+            var ctxt = $("form.enrollments-form");
+            var form = $("<form method='post'/>");
+            form.append($("<input name='_method' >").val(that.element.data("method")))
+            .append(ctxt.find("input[name='authenticity_token']"));
+            form.prop("action", that.element.prop('href'));
+            $("body").append(form);
+            form.submit();
+          });
+        }
+      });
+      $(this).yesnoDialogRemote("show");
+    }
+    return false;
+  });
 
   $.validator.addMethod('require-amount', function (value) {
     var size = $('.require-amount:checked').size();
