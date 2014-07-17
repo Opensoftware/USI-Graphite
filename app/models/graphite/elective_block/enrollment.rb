@@ -19,9 +19,11 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
     end
     state :queued do
       event :accept, :transitions_to => :accepted
+      event :reject, :transitions_to => :rejected
     end
     state :accepted
     state :rejected
+    state :archived
   end
 
   belongs_to :elective_block
@@ -32,13 +34,13 @@ class Graphite::ElectiveBlock::Enrollment < ActiveRecord::Base
   scope :pending, -> { where(:state => "pending") }
   scope :accepted, -> { where(:state => "accepted") }
   scope :queued, -> { where(:state => "queued") }
+  scope :not_versioned, -> {where("version" => nil)}
   scope :for_student, ->(student) { where(:student_id => student) }
   scope :for_elective_block, ->(block) { where(:elective_block_id => block) }
   scope :for_subject, ->(subject) {
     where("#{Graphite::ElectiveBlock::Enrollment.table_name}.elective_module_id" => subject) }
   scope :for_block, ->(block) {
     where("#{Graphite::ElectiveBlock::Enrollment.table_name}.block_id" => block) }
-
 
   def self.include_peripherals
     includes(:elective_module => [:translations, :employee => :employee_title])
