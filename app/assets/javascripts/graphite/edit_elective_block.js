@@ -30,6 +30,13 @@ $(document).ready(function() {
         required:true
       });
     });
+    if($("div.enroll-by-avg-grade input[type='checkbox']").is(":checked")) {
+      $('select.student-amount').rules("add", {
+        required:true
+      });
+    } else {
+      $('select.student-amount').rules("remove");
+    }
     $("input.lazy-validate, select.lazy-validate", "div.elective-subjects").each(function() {
       $(this).rules("remove");
     });
