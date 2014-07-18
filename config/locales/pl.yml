@@ -33,6 +33,9 @@ pl:
   label_elective_block_student_amount_short: stud.
   label_elective_block_chosen_yours: Twoje wybory przedmiotów obieralnych
   label_elective_block_enroll_by_avg_grade: Zapisy na podstawie średniej ze studiów
+  label_elective_block_export_student_list: Eksportuj listę zapisanych studentów
+  label_elective_block_report_student_list: Lista studentów
+  label_elective_block_or_block_name: Nazwa modułu / przedmiotu
   label_elective_block_block_plural: Bloki obieralne
   label_elective_block_block_new: Nowy blok obieralny
   label_elective_block_block_name: Nazwa bloku obieralnego
@@ -73,3 +76,5 @@ pl:
   label_enrollment_state_rejected: Odrzucone
   label_enrollment_state_accepted: Zaakceptowane
   label_enrollment_state_queued: Oczekujące na szeregowanie
+  label_specialty_singular: Specjalność
+  

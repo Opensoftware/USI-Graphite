@@ -14,5 +14,12 @@ Graphite::Engine.routes.draw do
 
     resources :modules
   end
+  namespace :reports do
+    resources :elective_blocks, :only => [] do
+      collection do
+        get :student_list
+      end
+    end
+  end
 
 end
