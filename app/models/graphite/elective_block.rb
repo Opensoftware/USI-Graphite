@@ -1,5 +1,18 @@
 class Graphite::ElectiveBlock < ActiveRecord::Base
 
+  include ::Workflow
+
+  workflow_column :state
+  # Workflow is used only for elective blocks having blocks.
+  workflow do
+    state :default do
+      event :schedule, :transitions_to => :scheduled
+    end
+    state :scheduled do
+      event :complete, :transitions_to => :default
+    end
+  end
+
   translates :name
   globalize_accessors :locales => I18n.available_locales
 
@@ -108,7 +121,8 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   end
 
   def scheduling_needed?
-    enroll_by_average_grade? && enrollments.queued.any?
+    enroll_by_average_grade? && enrollments.not_versioned.queued.any? &&
+      current_state == 'default'
   end
 
   def self.include_peripherals

@@ -132,6 +132,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     authorize! :update, @elective_block
 
     Resque.enqueue(Graphite::EnrollmentsScheduler, @elective_block.id)
+    @elective_block.schedule! if @elective_block.can_schedule?
 
     redirect_to graphite.elective_blocks_path
   end

@@ -112,6 +112,8 @@ class Graphite::EnrollmentsScheduler
               end
             end
           end
+        ensure
+          elective_block.complete! if elective_block.can_complete?
         end
       end
     end

@@ -12,7 +12,7 @@
     <td>
       <% if @elective_block.enroll_by_average_grade? %>
         <p>
-          <%=t('misc.reservation_count', :count => employee_block.enrollments.queued_or_accepted.count) %>
+          <%=t('misc.reservation_count', :count => employee_block.enrollments.not_versioned.queued_or_accepted.count) %>
           <br>
           <%=t( "misc.place_count", :count => employee_block.student_amount) %>
         </p>
