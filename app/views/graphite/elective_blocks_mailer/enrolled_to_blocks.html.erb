@@ -1,0 +1,3 @@
+<p>
+  <%=raw t( :mail_body_enrolled_to_blocks, block_count: t('misc.block_count', count: @enrollments.length), block_names: @enrollments.collect{|e| e.block.try(:name) }.join(", ")) %>
+</p>

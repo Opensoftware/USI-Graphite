@@ -58,6 +58,7 @@ pl:
   label_elective_block_enrollment_unavailable: Zapisy na przedmioty obieralne trwają od %{from_day} do %{to_day}
   label_schedule_perform: Wykonaj szeregowanie
   label_schedule_not_needed: Brak zgłoszeń do szeregowania
+  label_schedule_working: Szeregowanie jest wykonywane
   label_subject_plural: Przedmioty
   label_subject_amount: Ile mod./przedm.
   label_subject_add_singular: Dodaj przedmiot
@@ -77,4 +78,5 @@ pl:
   label_enrollment_state_accepted: Zaakceptowane
   label_enrollment_state_queued: Oczekujące na szeregowanie
   label_specialty_singular: Specjalność
-  
+  mail_subject_enrolled_to_blocks: Wyniki zapisów modułu obieralnego %{elective_block_name}
+  mail_body_enrolled_to_blocks: "Zostałeś(aś) zapisany(a) na %{block_count}: %{block_names}"
