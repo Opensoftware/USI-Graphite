@@ -191,6 +191,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @block_types = Graphite::ElectiveBlock::BlockType.all.sort
     @modules = @elective_block.modules.sort
     @blocks = @elective_block.elective_blocks.sort
+    @annuals = Annual.all
   end
 
   def elective_block_params
