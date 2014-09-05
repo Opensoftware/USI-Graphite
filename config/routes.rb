@@ -18,6 +18,7 @@ Graphite::Engine.routes.draw do
     resources :elective_blocks, :only => [] do
       collection do
         get :student_list
+        get :all_student_list
       end
     end
   end

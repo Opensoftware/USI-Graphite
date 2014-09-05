@@ -9,12 +9,32 @@ class Graphite::Reports::ElectiveBlocksController < GraphiteController
         students = Student.enrolled_to_elective_blocks
         cache_key = fragment_cache_key_for(students)
         data = Rails.cache.fetch(cache_key) do
-          file = Graphite::Xlsx::StudentList.new(students)
+          file = Graphite::Xlsx::AcceptedStudentList.new(students)
           data = file.to_xlsx
           Rails.cache.write(cache_key, data)
           data
         end
-        send_data(data, :filename => "#{t(:label_elective_block_report_student_list)}.xlsx", :type => "application/xlsx", :disposition => "inline")
+        send_data(data, :filename => "#{t(:label_elective_block_report_student_list)}.xlsx",
+                  :type => "application/xlsx", :disposition => "inline")
+      end
+    end
+  end
+
+  def all_student_list
+    authorize! :manage, :elective_blocks_reports
+
+    respond_to do |format|
+      format.xlsx do
+        students = Student.students_with_enrollments
+        cache_key = fragment_cache_key_for(students)
+        data = Rails.cache.fetch(cache_key) do
+          file = Graphite::Xlsx::AllStudentList.new(students)
+          data = file.to_xlsx
+          Rails.cache.write(cache_key, data)
+          data
+        end
+        send_data(data, :filename => "#{t(:label_elective_block_export_all_student_list)}.xlsx",
+                  :type => "application/xlsx", :disposition => "inline")
       end
     end
   end

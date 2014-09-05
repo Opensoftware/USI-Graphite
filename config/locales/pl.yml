@@ -34,6 +34,7 @@ pl:
   label_elective_block_chosen_yours: Twoje wybory przedmiotów obieralnych
   label_elective_block_enroll_by_avg_grade: Zapisy na podstawie średniej ze studiów
   label_elective_block_export_student_list: Eksportuj listę zapisanych studentów
+  label_elective_block_export_all_student_list: Eksportuj listę wszystkich studentów
   label_elective_block_report_student_list: Lista studentów
   label_elective_block_or_block_name: Nazwa modułu / przedmiotu
   label_elective_block_block_plural: Bloki obieralne
