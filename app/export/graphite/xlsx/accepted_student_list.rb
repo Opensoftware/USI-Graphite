@@ -29,6 +29,8 @@ class Graphite::Xlsx::AcceptedStudentList < Graphite::Xlsx::StudentList
 						student.surname_name,
 						student.user.email,
 						student.index_number,
+						student.passed_ects,
+						student.average_grade,
 						student_studies.studies.course.name,
 						student_studies.studies.study_degree.name,
 						student_studies.studies.study_type.name,
