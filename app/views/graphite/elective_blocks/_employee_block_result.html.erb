@@ -14,13 +14,24 @@
     </td>
   <% end %>
   <td>
-    <%= employee_block_result.modules.collect(&:ects_amount).reduce(&:+) %> ECTS
+    <%= employee_block_result.modules.collect(&:ects_amount).reduce(&:+) %>
+    ECTS
   </td>
 </tr>
 <% if employee_block_result.accepted_students.present? %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td><%=t :label_average_grade%></td>
+    <td><%=t :label_student_ects_amount%></td>
+    <td></td>
+  </tr>
   <% employee_block_result.accepted_students.sort.each do |student| %>
     <tr>
-      <td colspan="5"><%= student.surname_name %></td>
+      <td colspan="2"><%= student.surname_name %></td>
+      <td><%=student.average_grade%></td>
+      <td><%=student.passed_ects%></td>
+      <td></td>
     </tr>
   <% end %>
 <% else %>
