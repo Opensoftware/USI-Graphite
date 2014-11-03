@@ -1,10 +1,10 @@
 $(document).ready(function() {
   $("div.elements-list")
   .on("click", "button.button-delete", function() {
-    $(this).yesnoDialog({
+    $(this).yesnoDialogRemote({
       topic: $.i18n._('confirmation_elective_block_delete')
     });
-    $(this).yesnoDialog("show");
+    $(this).yesnoDialogRemote("show");
   })
   .on("checkbox-change-state", "button.button-checkbox", function() {
     $(this).toggleClass('button-small-checkbox-selected');
