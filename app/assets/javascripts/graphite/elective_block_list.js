@@ -45,4 +45,7 @@ $(document).ready(function() {
       $("#elective-block-"+key).remove();
     }
   });
+  $("button.select-all").click(function() {
+    $("button.button-checkbox", "div.theses-list").trigger("checkbox-change-state");
+  });
 });
