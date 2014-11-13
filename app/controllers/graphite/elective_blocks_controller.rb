@@ -187,7 +187,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
   def preload
     @studies = Studies.for_annual(current_annual).includes(course: :translations,
       study_type: :translations, study_degree: :translations)
-    .load.sort {|s1, s2| s1.course.name <=> s2.course.name}
+    .load.sort_by {|s| [s.course.name, s.study_type_id, s.study_degree_id] }
     @block_types = Graphite::ElectiveBlock::BlockType.all.sort
     @modules = @elective_block.modules.sort
     @blocks = @elective_block.elective_blocks.sort
