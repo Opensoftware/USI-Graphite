@@ -23,7 +23,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @elective_blocks = apply_scopes(Graphite::ElectiveBlock, params)
     .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
     .include_peripherals
-    .includes(:studies => [:course => :translations, :study_type => :translations,
+    .includes(:annual_studies => [:course => :translations, :study_type => :translations,
         :study_degree => :translations])
     .parents_only
     .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
@@ -73,7 +73,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .include_peripherals
     send("#{current_user.verifable_type.downcase}_#{Graphite::ElectiveBlock
       .find(params[:id]).block_type.const_name}")
-    @studies = @elective_block.studies.sort
+    @studies = @elective_block.annual_studies.sort
   end
 
   def edit

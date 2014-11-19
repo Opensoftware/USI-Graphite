@@ -28,6 +28,8 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   has_many :elective_block_studies, :class_name => "Graphite::ElectiveBlockStudies",
     dependent: :destroy
   has_many :studies, through: :elective_block_studies
+  has_many :annual_studies, -> { distinct },
+    through: :elective_block_studies, source: :studies
   has_many :elective_blocks, class_name: 'Graphite::ElectiveBlock::Block',
     dependent: :destroy
   accepts_nested_attributes_for :elective_blocks, :reject_if => lambda { |elective_block|
@@ -69,7 +71,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
   scope :for_student, ->(student) do
     joins(:elective_block_studies)
     .where("#{Graphite::ElectiveBlockStudies.table_name}.studies_id IN (?)",
-      student.student_studies.collect(&:studies_id))
+           student.student_studies.collect(&:studies_id))
   end
 
 
@@ -127,7 +129,7 @@ class Graphite::ElectiveBlock < ActiveRecord::Base
 
   def self.include_peripherals
     includes(:annual, :translations, :block_type => :translations,
-      :modules => [:translations, :employee => :employee_title])
+             :modules => [:translations, :employee => :employee_title])
   end
 
 end
