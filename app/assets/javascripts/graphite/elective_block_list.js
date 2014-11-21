@@ -46,6 +46,6 @@ $(document).ready(function() {
     }
   });
   $("button.select-all").click(function() {
-    $("button.button-checkbox", "div.theses-list").trigger("checkbox-change-state");
+    $("button.button-checkbox", "div.elective-blocks-list").trigger("checkbox-change-state");
   });
 });
