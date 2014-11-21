@@ -7,18 +7,21 @@
 <hr>
 <div class="form-group extra-margin">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <%= f.label :block_type_id, t(:label_elective_block_type_singular) %>
       <%= f.select :block_type_id, options_for_select(@block_types.collect {|bt| [bt.name,bt.id] }, @elective_block.block_type_id), {}, :class => "form-control block-type" %>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <%= f.label :min_modules_amount, t(:label_subject_amount) %>
       <%= f.select :min_modules_amount, options_for_select([["--", ""]] | (1..10).collect {|i| [i,i] }, @elective_block.min_modules_amount), {}, :class => "form-control" %>
-      <%= f.hidden_field :semester_id, :value => current_semester.semester.try(:id) %>
     </div>
     <div class="col-md-4">
       <%= f.label :annual_id, t(:label_annual) %>
       <%= f.select :annual_id, options_for_select(@annuals.collect {|a| [a.name,a.id] }, @elective_block.annual_id || current_annual.id), {}, :class => "form-control" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :semester_id, t(:label_semester) %>
+      <%= f.select :semester_id, options_for_select(@semesters.collect {|a| [a.name,a.id] }, @elective_block.semester_id || current_semester.try(:id)), {}, :class => "form-control" %>
     </div>
   </div>
 </div>

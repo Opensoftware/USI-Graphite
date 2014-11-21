@@ -61,7 +61,7 @@ pl:
   label_schedule_not_needed: Brak zgłoszeń do szeregowania
   label_schedule_working: Szeregowanie jest wykonywane
   label_subject_plural: Przedmioty
-  label_subject_amount: Ile mod./przedm.
+  label_subject_amount: Ile mod/przedm.
   label_subject_add_singular: Dodaj przedmiot
   label_subject_none_added: Nie dodano jeszcze żadnych przedmiotów
   label_subject_syllabus_link: Link do przedmiotu w Syllabusie
