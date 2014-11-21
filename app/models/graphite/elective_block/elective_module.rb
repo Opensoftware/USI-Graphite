@@ -8,8 +8,8 @@ class Graphite::ElectiveBlock::ElectiveModule < ActiveRecord::Base
   has_many :enrollments, :class_name => "Graphite::ElectiveBlock::Enrollment"
   has_many :block_modules, class_name: "Graphite::ElectiveBlock::BlockModule",
     dependent: :destroy
-  has_many :blocks, through: :block_module_associations,
-    class_name: "Graphite::ElectiveBlock::Block", source: :elective_block
+  has_many :blocks, through: :block_modules,
+    class_name: "Graphite::ElectiveBlock::Block", source: :block
 
   def <=>(other)
     name <=> other.name

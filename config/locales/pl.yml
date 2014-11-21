@@ -19,10 +19,12 @@ pl:
   label_elective_block_add: Dodaj moduł obieralny
   label_elective_block_add_plural: Dodaj moduły obieralne
   label_elective_block_found: Znaleziono %{x} wyników dla zadanych kryteriów. Strona %{current_page} z %{total_pages}
+  label_elective_block_singular: Przedmiot obieralny
   label_elective_block_plural: Przedmioty obieralne
   label_elective_block_plural_added: Dodane przedmioty obieralne
   label_elective_block_new_singular: Nowy przedmiot obieralny
   label_elective_block_add_singular: Dodawanie modułu
+  label_elective_block_list: Lista przedmiotów obieralnych
   label_elective_block_edit: Edycja modułu
   label_elective_block_name: Nazwa przedmiotu obieralnego
   label_elective_block_enter_name: Podaj nazwę modułu
@@ -37,6 +39,7 @@ pl:
   label_elective_block_export_all_student_list: Eksportuj listę wszystkich studentów
   label_elective_block_report_student_list: Lista studentów
   label_elective_block_or_block_name: Nazwa modułu / przedmiotu
+  label_elective_block_block_singular: Blok obieralny
   label_elective_block_block_plural: Bloki obieralne
   label_elective_block_block_new: Nowy blok obieralny
   label_elective_block_block_name: Nazwa bloku obieralnego
@@ -78,6 +81,7 @@ pl:
   label_enrollment_state_rejected: Odrzucone
   label_enrollment_state_accepted: Zaakceptowane
   label_enrollment_state_queued: Oczekujące na szeregowanie
-  label_specialty_singular: Specjalność
-  mail_subject_enrolled_to_blocks: Wyniki zapisów modułu obieralnego %{elective_block_name}
+  mail_subject_enrolled_to_blocks: "Wyniki zapisów modułu obieralnego %{elective_block_name}"
   mail_body_enrolled_to_blocks: "Zostałeś(aś) zapisany(a) na %{block_count}: %{block_names}"
+  label_export_elective_blocks_sheet_name: Lista modułów obieralnych
+  label_export_elective_subjects_sheet_name: Lista przedmiotów obieralnych

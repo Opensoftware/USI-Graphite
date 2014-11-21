@@ -9,7 +9,8 @@ class Graphite::ElectiveBlocksController < GraphiteController
   has_scope Graphite::ElectiveBlock, :by_annual, :as => :annual_id
   has_scope Graphite::ElectiveBlock, :by_block_type, :as => :block_type_id
 
-  DEFAULT_FILTERS = {:block_type => :block_type_id, :studies => :studies_id, :semester => :semester_number, :annual => :annual_id}.freeze
+  DEFAULT_FILTERS = {:block_type => :block_type_id, :studies => :studies_id,
+                     :semester => :semester_number, :annual => :annual_id}.freeze
 
   authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe, :perform_scheduling]
   skip_authorization_check [:event_pipe]
@@ -23,24 +24,40 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @elective_blocks = apply_scopes(Graphite::ElectiveBlock, params)
     .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
     .include_peripherals
-    .includes(:annual_studies => [:course => :translations, :study_type => :translations,
-        :study_degree => :translations])
+    .preload(:annual_studies => [:course => :translations, :study_type => :translations,
+                                  :study_degree => :translations])
     .parents_only
     .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
     @filters = DEFAULT_FILTERS
 
     if exportable_format?
       @cache_key = fragment_cache_key_for(@elective_blocks)
+      @elective_blocks = @elective_blocks
+      .preload(:annual, :block_type, :modules, :semester => :translations,
+                :annual_studies => [:specialization => :translations])
     else
-      @elective_blocks = @elective_blocks.paginate(:page => params[:page].to_i < 1 ? 1 : params[:page],
-        :per_page => params[:per_page].to_i < 1 ? 10 : params[:per_page])
+      @elective_blocks = @elective_blocks
+      .paginate(:page => params[:page].to_i < 1 ? 1 : params[:page],
+                :per_page => params[:per_page].to_i < 1 ? 10 : params[:per_page])
     end
+
 
     respond_with @elective_blocks do |f|
       f.js { render :layout => false }
       [:xlsx, :pdf].each do |format|
         f.send(format) do
+          data = Rails.cache.fetch(@cache_key) do
+            file = format.to_s.classify.constantize::ElectiveBlocksList
+            .new(current_user, @elective_blocks)
+            data = file.send("to_#{format}")
+            Rails.cache.write(@cache_key, data)
+            data
+          end
 
+          send_data(data,
+                    :filename => "#{t(:label_elective_block_list)}.#{format}",
+                    :type => "application/#{format}",
+                    :disposition => "inline")
         end
       end
     end
@@ -72,7 +89,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     @elective_block = Graphite::ElectiveBlock
     .include_peripherals
     send("#{current_user.verifable_type.downcase}_#{Graphite::ElectiveBlock
-      .find(params[:id]).block_type.const_name}")
+    .find(params[:id]).block_type.const_name}")
     @studies = @elective_block.annual_studies.sort
   end
 
@@ -186,7 +203,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   def preload
     @studies = Studies.for_annual(current_annual).includes(course: :translations,
-      study_type: :translations, study_degree: :translations)
+                                                           study_type: :translations, study_degree: :translations)
     .load.sort_by {|s| [s.course.name, s.study_type_id, s.study_degree_id] }
     @block_types = Graphite::ElectiveBlock::BlockType.all.sort
     @modules = @elective_block.modules.sort
@@ -197,17 +214,17 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   def elective_block_params
     attrs = [:name, :block_type_id, :min_modules_amount, :min_ects_amount,
-      :annual_id, :semester_id, :enroll_by_avg_grade, :study_ids => [],
-      :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
-        :ects_amount, :semester_number],
-      :elective_blocks_attributes => [:id, :name, :min_ects_amount,
-        :elective_block_id, :module_ids => []
-      ]
-    ]
+             :annual_id, :semester_id, :enroll_by_avg_grade, :study_ids => [],
+             :modules_attributes => [:id, :name, :www, :owner_id, :student_amount,
+                                     :ects_amount, :semester_number],
+             :elective_blocks_attributes => [:id, :name, :min_ects_amount,
+                                             :elective_block_id, :module_ids => []
+                                             ]
+             ]
     if params[:action] =~ /enroll/
       attrs |= [:enrollments_attributes => [:id, :elective_module_id,
-          :student_id, :state, :elective_block_id, :block_id, :enroll,
-          :priority, :_destroy]]
+                                            :student_id, :state, :elective_block_id, :block_id, :enroll,
+                                            :priority, :_destroy]]
     end
     params.require(:elective_block).permit(attrs)
   end
@@ -228,10 +245,10 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .includes(:block => [:translations, :modules => :translations])
     @enrollments = blocks.reduce([]) do |sum, block|
       sum << (@student_block_enrollments.detect {|enrollment| enrollment.block == block } ||
-          block.enrollments.build({:block => block,
-            :elective_block => @elective_block,
-            :student => current_user.student }
-          .merge(@elective_block.enroll_by_average_grade? ? {state: :queued} : {})))
+              block.enrollments.build({:block => block,
+                                       :elective_block => @elective_block,
+                                       :student => current_user.student }
+                                      .merge(@elective_block.enroll_by_average_grade? ? {state: :queued} : {})))
       sum
     end
   end
@@ -244,16 +261,16 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .for_subject(modules).include_peripherals
     @enrollments = modules.reduce([]) do |sum, mod|
       sum << (student_module_enrollments.detect {|enrollment| enrollment.elective_module == mod } ||
-          mod.enrollments.build(:elective_module => mod,
-          :elective_block => @elective_block,
-          :student => current_user.student))
+              mod.enrollments.build(:elective_module => mod,
+                                    :elective_block => @elective_block,
+                                    :student => current_user.student))
       sum
     end
   end
 
   def employee_elective_block_block_of_subjects
     @elective_block = @elective_block.includes(:elective_blocks =>
-        [:translations, :modules => :translations]).find(params[:id])
+                                               [:translations, :modules => :translations]).find(params[:id])
   end
 
   def employee_elective_block_n_from_m_subjects
