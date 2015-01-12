@@ -21,6 +21,7 @@
         <div class="col-md-6">
           <h6 class="text-list">
             <%= elective_block.modules.collect {|mod| mod.semester_number}.uniq.sort.join(", ") %>
+            <%=raw "&ndash; #{t(:label_available_for_enrollments)}: #{elective_block.semester.name}".downcase %>
           </h6>
         </div>
         <div class="col-md-2">

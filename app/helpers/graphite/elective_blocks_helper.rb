@@ -15,11 +15,17 @@ module Graphite::ElectiveBlocksHelper
     .load
     .sort_by {|s| [s.course.name, s.study_type_id, s.study_degree_id] }
     .collect {|s| [[s.course.name, *("(#{s.specialization.name})" if s.specialty_id.present?),
-          " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "),
-        s.id]}
+                    " - #{s.study_type.name.downcase} #{s.study_degree.name.camelize(:lower)}"].join(" "),
+                   s.id]}
   end
 
-  def semester_filter_content
+  def semester_season_filter_content
+    return @semester_season_filter if defined?(@semester_filtersemester_season_filter)
+    @semester_season_filter = [[t(:label_all), nil]] | Semester
+    .includes(:translations).all.collect { |sem| [sem.name, sem.id] }
+  end
+
+  def semester_studies_filter_content
     return @semester_filter if defined?(@semester_filter)
     @semester_filter = [[t(:label_all), nil]] | (1..8).collect {|i| [i, i]}
   end

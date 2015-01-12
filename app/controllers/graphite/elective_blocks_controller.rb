@@ -6,11 +6,13 @@ class Graphite::ElectiveBlocksController < GraphiteController
 
   has_scope Graphite::ElectiveBlock, :by_studies, :as => :studies_id
   has_scope Graphite::ElectiveBlock, :by_semester, :as => :semester_number
+  has_scope Graphite::ElectiveBlock, :by_semester_season, :as => :semester_id
   has_scope Graphite::ElectiveBlock, :by_annual, :as => :annual_id
   has_scope Graphite::ElectiveBlock, :by_block_type, :as => :block_type_id
 
   DEFAULT_FILTERS = {:block_type => :block_type_id, :studies => :studies_id,
-                     :semester => :semester_number, :annual => :annual_id}.freeze
+                     :semester_studies => :semester_number, :semester_season => :semester_id,
+                     :annual => :annual_id }.freeze
 
   authorize_resource except: [:index, :enroll, :check_enrollment, :event_pipe, :perform_scheduling]
   skip_authorization_check [:event_pipe]
@@ -25,7 +27,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
     .select("lower(#{Graphite::ElectiveBlock.table_name}.name), #{Graphite::ElectiveBlock.table_name}.*")
     .include_peripherals
     .preload(:annual_studies => [:course => :translations, :study_type => :translations,
-                                  :study_degree => :translations])
+                                 :study_degree => :translations])
     .parents_only
     .order("lower(#{Graphite::ElectiveBlock.table_name}.name) ASC")
     @filters = DEFAULT_FILTERS
@@ -34,7 +36,7 @@ class Graphite::ElectiveBlocksController < GraphiteController
       @cache_key = fragment_cache_key_for(@elective_blocks)
       @elective_blocks = @elective_blocks
       .preload(:annual, :block_type, :modules, :semester => :translations,
-                :annual_studies => [:specialization => :translations])
+               :annual_studies => [:specialization => :translations])
     else
       @elective_blocks = @elective_blocks
       .paginate(:page => params[:page].to_i < 1 ? 1 : params[:page],
