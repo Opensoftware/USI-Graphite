@@ -24,6 +24,7 @@ class Graphite::Xlsx::StudentList < Graphite::Xlsx::XlsxStub
       I18n.t(:label_specialty_singular),
       I18n.t(:label_semester_number),
       I18n.t(:label_elective_block_block_name),
+      I18n.t(:label_filter_semester_season),
       I18n.t(:label_elective_block_or_block_name)
     ]
     sheet.add_row header, :style => styles[:header]
